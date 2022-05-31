@@ -1,3 +1,0 @@
-C:/Users/Esteb/OneDrive/Documentos/AYUDAS/Paula ATI IISemestre/cmake-build-debug/CMakeFiles/Paula_ATI_IISemestre.dir
-C:/Users/Esteb/OneDrive/Documentos/AYUDAS/Paula ATI IISemestre/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Esteb/OneDrive/Documentos/AYUDAS/Paula ATI IISemestre/cmake-build-debug/CMakeFiles/rebuild_cache.dir
