@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Esteb/OneDrive/Documentos/AYUDAS/Paula ATI IISemestre/MPaula.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+
