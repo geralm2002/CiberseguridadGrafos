@@ -19,15 +19,10 @@ struct Pais {
     char continente[25];
     struct Pais *izquierda;
     struct Pais *derecha;
-};
-
-
-
-
-Pais* raiz = NULL;
+};Pais* raiz = NULL;
 
 /*============================================================================================================================================*/
-//Funciones Tipo Ciber Ataque
+
 
 
 
