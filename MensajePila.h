@@ -1,16 +1,10 @@
-//
-// Created by Esteb on 5/31/2022.
-//
 
 #ifndef MPAULA_C_MENSAJE_H
 #define MPAULA_C_MENSAJE_H
 
 #include <stdlib.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>  // isalpha, isupper
-
-
 #include "Grafo.h"
 //=====================================================================================================================
 //                                           Definción de constantes
@@ -18,7 +12,7 @@
 #define LONGITUD_ALFABETO 26
 #define INICIO_ALFABETO_MAYUSCULAS 65
 #define INICIO_ALFABETO_MINUSCULAS 97
-#define MOD(i, n) (i % n + n) % n // Calcular módulo positivo, gracias a
+#define MOD(i, n) (i % n + n) % n // Calcular módulo positivo
 #define ROTACIONES 4 //n desplazamientos
 
 #define TAMMENSAJE 250
@@ -58,7 +52,7 @@ Mensaje* crearMensaje(NodoPais* pais, char m[TAMMENSAJE]);
 //                                              Funciones
 //=====================================================================================================================
 void crearPila(NodoPila** pila){
-    *pila = NULL;
+    *pila = NULL; //crea la pila vacía
 }
 void push(NodoPila** pila, Mensaje*msm){
     NodoPila* nuevo;

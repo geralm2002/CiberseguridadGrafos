@@ -1,6 +1,3 @@
-//
-// Created by Esteb on 5/31/2022.
-//
 
 #ifndef MPAULA_C_CIBERDELINCUENTE_H
 #define MPAULA_C_CIBERDELINCUENTE_H
@@ -16,6 +13,7 @@ struct Ciberdelincuente {
 };
 Ciberdelincuente* listaCD = NULL;
 Ciberdelincuente* finalCD = NULL;
+
 //Funciones Ciberdelincuente
 
 void insertarCiberdelinciente(int id, char* grupo, char* paisorigen, char* ataques[]) {
