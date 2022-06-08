@@ -21,7 +21,6 @@ void titulo() {
 
 int datosTipoCiberataques() {
     int opcion;
-    char repite = 1;
     printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
     scanf("%d" , &opcion);
     switch (opcion) {
@@ -29,7 +28,11 @@ int datosTipoCiberataques() {
             modificarTipoDeCiberataque();
             break;
         case 2:
-            printf("Por implementar");
+            int resp = eliminarTipoDeCiberAtaque();     //No debe tener un ataque asociado
+            if(resp)
+                printf("Tipo de ciber ataque eliminado exitosamente");
+            else
+                printf("No se ha podido eliminar el tipo de cirber ataque");
             break;
         case 3:
             mostrarTiposDeCiberataques();
@@ -59,15 +62,19 @@ int datosCiberdelincuentes() {
     scanf("%d" , &opcion);
     switch (opcion) {
         case 1:
-            modificarCiberdelincuente();
+            //insertarCiberdelincuente();
             break;
         case 2:
-            printf("Por implementar");
+            modificarCiberdelincuente();
+
             break;
         case 3:
-            mostrarciberdelincuentes();
+            eliminarCiberDelincuente();
             break;
         case 4:
+            mostrarciberdelincuentes();
+            break;
+        case 5:
             return 0;
         default:
 			printf("Error: Favor ingresar uno de los numeros que se muestran en el menu!");
@@ -78,10 +85,11 @@ int datosCiberdelincuentes() {
 void menuCiberdelincuentes(int repite) {
     do {
         titulo();
-        printf("\t\t[01]. Modificar ciberdelincuente\n");
-        printf("\t\t[02]. Eliminar ciberdelincuente\n");
-        printf("\t\t[03]. Ver ciberdelincuentes\n");
-        printf("\t\t[04]. Salir\n");
+        printf("\t\t[01]. Agregar ciberdelincuente\n");
+        printf("\t\t[02]. Modificar ciberdelincuente\n");
+        printf("\t\t[03]. Eliminar ciberdelincuente\n");
+        printf("\t\t[04]. Ver ciberdelincuentes\n");
+        printf("\t\t[05]. Salir\n");
         repite = datosCiberdelincuentes();
     } while(repite);
 }
@@ -169,7 +177,7 @@ int main() {
     insertarTipoCiberAtaque(1, "Tipo1" , "Malware" , canales);
 
     char* ataques[] = {"Ataque 1" , "Ataque 2" , "Ataque 3"};//procuren que siempre sean 3 ataques
-    insertarCiberdelinciente(1, "n/a", "costa rica", ataques);
+    //insertarCiberdelinciente(1, "n/a", "costa rica", ataques);
 
     insertarPais(raiz, 506, "Costa Rica" , 200000, "America");
     insertarPais(raiz, 47, "Noruega" , 537900, "Europa");

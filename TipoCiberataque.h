@@ -76,6 +76,28 @@ void mostrarTiposDeCiberataques() {
     printf("\nPresione una tecla para continuar...");
     system("pause>nul");                                    //Se detiene la consola hasta recibir alguna entrada
 }
+int eliminarTipoDeCiberAtaque(){
+    TipoDeCiberataque * lista =listaTC;
+    TipoDeCiberataque * anterior = NULL;
+    int codigo = 0;
+    printf("Ingrese el codigo del tipo: ");
+    scanf("%d", &codigo);
+    while(lista!=NULL){
+        if(lista->codigo == codigo){
+            if(anterior==NULL){
+                listaTC = lista->siguiente;
+            }else{
+                anterior->siguiente = lista->siguiente;
+            }
+            free(lista);
+            return 1;
+        }else{
+            anterior = lista;
+            lista = lista->siguiente;
+        };
+    }
+    return 0;
+}
 
 
 #endif //MPAULA_C_TIPOCIBERATAQUE_H

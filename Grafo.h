@@ -10,38 +10,34 @@
 #include "Ciberdelincuente.h"
 #include "TipoCiberataque.h"
 
-typedef struct NodoGrafo NodoGrafo;
-typedef struct NodoPais NodoPais;
-typedef struct Ataque Ataque;
-typedef struct Arista Arista;
 
 /*=====================================================================================================================
  *                      Declaración de Registros
 =====================================================================================================================*/
 
-struct NodoGrafo{
+typedef struct NodoGrafo{
     struct NodoPais *nodoPais;
     struct Grafo *enlace;
     struct Ataque *listaAtaques;
-};
+}NodoGrafo;
 
-struct NodoPais{ //País tiene Izquierda y derecha, entonces este nodo solo tiene país
+typedef struct NodoPais{ //País tiene Izquierda y derecha, entonces este nodo solo tiene país
     int codigo;
     char nombre[25];
     char continente[25];
-};
-struct Ataque{
+}NodoPais;
+typedef struct Ataque{
     struct NodoPais *destino;
     struct Arista *arista;
     struct Ataque *siguiente;
-};
-struct Arista{
+}Ataque;
+typedef struct Arista{
 
     struct TipoDeCiberataque *ciberataque;
     struct  Ciberdelincuente  *ciberdelincuente;
     int datosAfectados; //en Gigabytes
     double tiempo; //duración del ciberataque en segundos similar al peso
-};
+}Arista;
 /*=====================================================================================================================
  *                      Declaración de funciones
 =====================================================================================================================*/
@@ -145,7 +141,7 @@ void eliminarUnCiberAtaque(NodoGrafo** paisGrafo,NodoPais* destino, int datos){
 
     if(encontrado!= NULL){
         actual = encontrado->listaAtaques;
-        anterior= actual;
+        anterior= NULL;
         actual = actual->siguiente;
         /*Enlace del nodo anterior con siguiente*/
         if (actual!=NULL){
@@ -158,7 +154,8 @@ void eliminarUnCiberAtaque(NodoGrafo** paisGrafo,NodoPais* destino, int datos){
         free(actual);
     }
 }
-NodoPais * buscarCiberAtaque(NodoGrafo** paisGrafo, NodoPais* destino, int datos){
+NodoPais * buscarCiberAtaque(NodoGrafo** paisGrafo, NodoPais * destino, int datos){
+    //El parámetro de los datos es necesario para especificar el ciber ataque a buscar
     NodoGrafo * unNodo = *paisGrafo;
     Ataque * indice;
     for(indice = unNodo->listaAtaques; indice != NULL; indice = indice->siguiente){
@@ -169,10 +166,6 @@ NodoPais * buscarCiberAtaque(NodoGrafo** paisGrafo, NodoPais* destino, int datos
     return NULL;
 
 }
-void editarCiberAtaque(){
-
-}
-
 
 
 
