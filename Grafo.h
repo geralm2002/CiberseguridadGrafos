@@ -27,16 +27,21 @@ typedef struct Ataques{
     struct Ataque *siguiente;
 }Ataques;
 typedef struct Arista{
-
     int  idtipo;
     int   idciberdelincuente;
     int datosAfectados; //en Gigabytes
     double tiempo; //duración del ciberataque en segundos similar al peso
 }Arista;
+//VARIABLE INICIALIZADORA DEL GRAFO
+
+
+
+
+
 /*=====================================================================================================================
  *                      Declaración de funciones
 =====================================================================================================================*/
-NodoGrafo * primeroGrafo = NULL;
+
 
 NodoGrafo * nuevoVertice(NodoGrafo** ngrafo, char * nombre);
 NodoGrafo * obtenerVertice(NodoGrafo** pGrafo, char * nombre); //obtiene el vertice del grafo, null si no existe
@@ -154,6 +159,8 @@ Ataques * crearAtaque(NodoGrafo * procedente, char * destino, TipoDeCiberataque 
     Arista * arista = crearArista(tipo,idCiberDelincuente, datos, tiempo);
     nuevoAtaque->arista = arista;
     agregarAtaque(procedente, nuevoAtaque);
+    printf("¡Ataque agregado!");
+
 }
 
 
@@ -170,11 +177,12 @@ int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
     Ataques * ataque;
     ataque = buscarAtaque(nodoProcedente, procedente->nombre);
     if(ataque==NULL){
-        //crear el ataque para agregarlo
-
+        ataque = crearAtaque(nodoProcedente, destino->nombre, tipo, delincuente);
+        agregarAtaque(nodoProcedente, ataque);
+        printf("\n->Ataque agregado\n");
+    }else{
+        printf("\n->El ataque ya existe en el registro<-\n");
     }
-
-
 }
 
 //obtiene el vertice según el codigo, devuleve null en caso de no encontrarlo

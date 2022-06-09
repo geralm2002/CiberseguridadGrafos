@@ -169,6 +169,18 @@ void mostrarJerarquia(Pais* nodo, int primero, int nivel) {
         }
     }
 }
-
+Pais * buscarPorCodigo(Pais * raiz, int codigo){
+    int encontrado = 0; //1 si lo encuentra 0 si no
+    while (!encontrado && raiz != NULL){
+        if(codigo == raiz->codigo){
+            encontrado=1;
+        }else if(codigo< raiz->codigo){
+            raiz = raiz->izquierda;
+        }else if(codigo> raiz->derecha){
+            raiz = raiz->derecha;
+        }
+    }
+    return raiz; //retorna el nodo encontrado
+}
 
 #endif //MPAULA_C_PAIS_H

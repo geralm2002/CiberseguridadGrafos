@@ -9,7 +9,7 @@ typedef struct TipoDeCiberataque TipoDeCiberataque;
 struct TipoDeCiberataque {
     int codigo;
     char nombre[25];
-    char descripcion[30];
+    char descripcion[100];
     char canales[3][25];
     struct TipoDeCiberataque *siguiente;
 };
@@ -108,6 +108,17 @@ int tipoExiste(TipoDeCiberataque * lista,int tipo){
         }
     }
     return 0;
+}
+TipoDeCiberataque * obtenerTipoCiberataque(int tipo){
+    TipoDeCiberataque * aux = listaTC;
+    for(; aux->siguiente; )
+    {
+        if(aux->codigo == tipo){
+            return aux;
+        }
+        aux = aux->siguiente;
+    }
+    return NULL;
 }
 
 

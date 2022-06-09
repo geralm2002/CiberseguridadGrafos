@@ -22,18 +22,16 @@ const char *alfabetoMinusculas = "abcdefghijklmnopqrstuvwxyz",
 //=====================================================================================================================
 //                                           Definción de registros
 //=====================================================================================================================
-typedef NodoPais NodoPais;
-typedef struct NodoPila NodoPila;
-typedef struct Mensaje Mensaje;
-
-struct NodoPila{
+typedef struct NodoPila{
     struct mensaje *mensaje;
     struct nodoPila *siguiente;
-};
-struct Mensaje{
-    struct NodoPais *receptor;
+}NodoPila;
+typedef struct Mensaje{
+    char receptor[25];
     char detalle[TAMMENSAJE];
-};
+}Mensaje;
+
+NodoPila * tope = NULL;
 //=====================================================================================================================
 //                                           Definción de funciones
 //=====================================================================================================================
@@ -47,7 +45,7 @@ void pop(NodoPila** pila);//quita el último elemento
 int pilaVacia(NodoPila* pila);
 Mensaje *cima(NodoPila* pila);
 
-Mensaje* crearMensaje(NodoPais* pais, char m[TAMMENSAJE]);
+Mensaje* crearMensaje(char * pais, char m[TAMMENSAJE]);
 //=====================================================================================================================
 //                                              Funciones
 //=====================================================================================================================
@@ -69,10 +67,10 @@ void pop(NodoPila** pila){
         free(f);
     }
 }
-Mensaje* crearMensaje(NodoPais* pais, char m[TAMMENSAJE] ){
+Mensaje* crearMensaje(char * pais, char m[TAMMENSAJE] ){
     Mensaje *nuevo;
     nuevo = (Mensaje*) malloc(sizeof(Mensaje));
-    nuevo->receptor = pais;
+    strcpy(nuevo->receptor, pais);
     strcpy(nuevo->detalle,m);
     return nuevo;
 }
@@ -133,16 +131,15 @@ int ord(char c)
     return (int)c;
 }
 
-void Notificar(NodoPila *pila,NodoPais *pais){
+void Notificar(NodoPila *pila,char * paisdestino){
     char mensaje[TAMMENSAJE], mensajeCifrado[TAMMENSAJE];
-
     printf("Escribe el mensaje a cifrar: ");
     fgets(mensaje,TAMMENSAJE,stdin); //evita desbordamientos
     mensaje[strcspn(mensaje, "\r\n")]=0; //quita saltos de linea
     cifrar(mensaje,mensajeCifrado);
     printf("El mensaje cifrado es: %s\n", mensajeCifrado);
 
-    Mensaje *notificacion = crearMensaje(pais,mensajeCifrado);
+    Mensaje *notificacion = crearMensaje(paisdestino,mensajeCifrado);
     push(pila,notificacion);
 }
 
@@ -151,7 +148,7 @@ int pilaVacia(NodoPila* pila)
 {
     return pila==NULL;
 }
-Mensaje *cima(NodoPila* pila){
+Mensaje * cima(NodoPila* pila){
     if(pilaVacia(pila)){
         printf("La pila está vacía");
         exit(1);
@@ -165,7 +162,7 @@ void consultarUltimoMensaje(NodoPila *pila){
     if(!pilaVacia(pila)){
         Mensaje *msm = cima(pila);
         descifrar(msm->detalle,descifrado);
-        printf("País de destino: %s",msm->receptor->nombre);
+        printf("País de destino: %s",msm->receptor);
         printf("Mensaje: %s",descifrado);
     }else{
         printf("Ya no hay más mensajes");

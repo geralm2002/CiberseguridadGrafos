@@ -15,13 +15,8 @@ Ciberdelincuente* listaCD = NULL;
 Ciberdelincuente* finalCD = NULL;
 
 //Funciones Ciberdelincuente
-void agregarCiberDelincuente(){
-    int id;
-    char grupo[25];
-    char paisOrigen[30];
-
-}
 void insertarCiberdelincuente(int id, char* grupo, char* paisorigen, char* ataques[]) {
+
     Ciberdelincuente* puntero = (Ciberdelincuente*) malloc(sizeof(Ciberdelincuente));       //Se crea un puntero en donde se guarda el nuevo nodo
 
     puntero->id = id;                                   //Se asignan las variables
@@ -73,19 +68,20 @@ void eliminarCiberDelincuente(){
             if(anterior != NULL){
                  anterior->siguiente = lista->siguiente; //se salta el enlace
                  free(lista);
-                 printf("¡Ciberdelincuente eliminado!");
+                 printf("¡Ciberdelincuente eliminado!\n");
                  return;
             }else{
-
-
+                listaCD = listaCD->siguiente;
+                free(lista);
+                printf("¡Ciberdelincuente eliminado!\n");
+                return;
             }
         }
         anterior = lista;
         lista = lista->siguiente;
     }
-    printf("El ciberdelincuente no se encuentra");
+    printf("El ciberdelincuente no se encuentra\n");
 }
-
 void mostrarciberdelincuentes() {
     Ciberdelincuente* lista = listaCD;
     printf("\n\t----------------------------\n");
@@ -115,6 +111,15 @@ int ciberdelincuenteExiste(Ciberdelincuente* lista, int id){
     }
     return 0;
 }
-
+Ciberdelincuente * obtenerCiberdelicuente(int id){
+    Ciberdelincuente * aux  = listaCD;
+    for(;aux->siguiente;){
+        if(aux->id == id){
+            return aux;
+        }
+        aux = aux->siguiente;
+    }
+    return NULL
+}
 
 #endif //MPAULA_C_CIBERDELINCUENTE_H
