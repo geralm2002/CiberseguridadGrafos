@@ -98,6 +98,17 @@ int eliminarTipoDeCiberAtaque(){
     }
     return 0;
 }
+int tipoExiste(TipoDeCiberataque * lista,int tipo){
+    TipoDeCiberataque * actual;
+    for(;actual->siguiente;){
+        if(actual->codigo==tipo){
+            return 1;
+        }else{
+            actual = actual->siguiente;
+        }
+    }
+    return 0;
+}
 
 
 #endif //MPAULA_C_TIPOCIBERATAQUE_H

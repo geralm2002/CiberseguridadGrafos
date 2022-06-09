@@ -175,9 +175,13 @@ int main() {
     //CARGA DE DATOS (solo voy a meter un registro por cada uno para que ustedes metan sus propios datos)
     char* canales[] = {"Canal1" , "Canal2" , "Canal3"};
     insertarTipoCiberAtaque(1, "Tipo1" , "Malware" , canales);
-
+    insertarTipoCiberAtaque(2, "Tipo2" , "Troyen" , canales);
+    insertarTipoCiberAtaque(3, "Tipo3" , "Phishing" , canales);
+    insertarTipoCiberAtaque(4, "Tipo4" , "DDos" , canales);
     char* ataques[] = {"Ataque 1" , "Ataque 2" , "Ataque 3"};//procuren que siempre sean 3 ataques
-    //insertarCiberdelinciente(1, "n/a", "costa rica", ataques);
+    insertarCiberdelincuente(1, "n/a", "Costa Rica", ataques);
+    insertarCiberdelincuente(2, "Anonymous", "Alemania", ataques);
+    insertarCiberdelincuente(3, "HackerSpace", "Inglaterra", ataques);
 
     insertarPais(raiz, 506, "Costa Rica" , 200000, "America");
     insertarPais(raiz, 47, "Noruega" , 537900, "Europa");
