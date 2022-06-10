@@ -10,6 +10,7 @@
 /*============================================================================================================================================*/
 //Menus y recoleccion de datos
 NodoGrafo * primeroGrafo = NULL;
+NodoPila pila ;
 
 
 void titulo() {
@@ -143,7 +144,6 @@ int datosPaises() {
 
 void menuPaises(int repite) {
     do {
-        titulo();
         printf("\t\t[01]. Insertar pais\n");
         printf("\t\t[02]. Modificar pais\n");
         printf("\t\t[03]. Eliminar pais\n");
@@ -160,7 +160,7 @@ void opcionRegistraCiberAtaque(){
     idTipoCiberataque,
     idCiberdelincuente,
     datosAfectados;
-    double tiempoDuracion;
+    float tiempoDuracion;
 
     Pais * pProcedente;
     Pais * pDestino;
@@ -168,48 +168,44 @@ void opcionRegistraCiberAtaque(){
     TipoDeCiberataque * ciberataque;
     //Obtener país de prcedencia válido
     do{
-        printf("\n->Inserte el código del país que realiza el ataque: ");
+        printf("\n->Inserte el codigo del pais que realiza el ataque: ");
         scanf("%d", &codigoPaisProcedente);
         pProcedente = buscarPorCodigo(raiz, codigoPaisProcedente);
         if(pProcedente==NULL)
-            printf("El país de origen no se encuentra registrado! intente de nuevo\n");
+            printf("El pais de origen no se encuentra registrado! intente de nuevo\n");
     } while (pProcedente==NULL);
     //Obtener país de destino válido
     do{
-        printf("\n->Inserte código del país de destino: ");
+        printf("\n->Inserte codigo del país de destino: ");
         scanf("%d", &codigoPaisDestino);
         pDestino = buscarPorCodigo(raiz, codigoPaisDestino);
         if(pDestino==NULL)
-            printf("El país de destino no se encuentra registrado! intente de nuevo\n");
+            printf("El pais de destino no se encuentra registrado! intente de nuevo\n");
     } while (pDestino==NULL);
     //Obtener país tipo ciberataque
     do{
-        printf("\n->Inserte el id del tipo de ciberataque");
+        printf("\n->Inserte el id del tipo de ciberataque: ");
         scanf("%d", &idTipoCiberataque);
         ciberataque = obtenerTipoCiberataque(idTipoCiberataque);
         if(ciberataque==NULL){
-            printf("El tipo del ciber ataque no se encuentra registrado\n");
+            printf("El tipo del ciberataque no se encuentra registrado\n");
         }
     } while (ciberataque ==NULL);
     //Obtener país ciberdelincuente
     do{
         printf("\n->Inserte el ciberdelincuente: ");
         scanf("%d", &idCiberdelincuente);
-        ciberdelincuente = obtenerCiberdelicuente(ciberdelincuente);
+        ciberdelincuente = obtenerCiberdelicuente(idCiberdelincuente);
         if(ciberdelincuente==NULL)
             printf("Por favor ingrese un ciberdelincuente registrado\n");
-    } while (ciberataque== NULL);
+    } while (ciberdelincuente== NULL);
     printf("\nInserte la cantidad de datos afectados en gigabytes: ");
     scanf("%d", &datosAfectados);
     printf("\nInserte el tiempo de duración: ");
-    scanf("lf", &tiempoDuracion);
-    realizarAtaque(primeroGrafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
-
-    printf("\nAtaque registrado exitosamente!\n");
-
-
-    printf( "Enviar notificacion a %s :",pDestino->nombre);
-    Notificar(tope, pDestino->nombre);
+    scanf("%f", &tiempoDuracion);
+    realizarAtaque(grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
+    printf( "Enviar notificacion a %s ",pDestino->nombre);
+    Notificar(&pila, pDestino->nombre);
 
 
 }
@@ -240,9 +236,9 @@ int datosGestionarCiberAtaques(){
 void menuGestionarCiberAtaques(){
     int repite;
     do{
-        titulo();
+        printf("\n     ---------------Submenú gestion de ciberataques(grafos)----------------------------------\n");
         printf("\t\t[01]. Registrar ciberataque\n");
-        printf("\t\t[02]. Editar información de un ciberataque\n");
+        printf("\t\t[02]. Editar informacion de un ciberataque\n");
         printf("\t\t[03]. Eliminar un ciberataque\n");
         printf("\t\t[04]. Eliminar todos los ciberataques de un país\n");
         printf("\t\t[05]. Consultar toda la información de ciberataques\n");
@@ -284,13 +280,14 @@ void insertarDatosManuales(){
 /*============================================================================================================================================*/
 int main() {
     insertarDatosManuales();
-
+    crearPila(&pila); //crea una pila vacía
     int opcion = 0;
     char repite = 1;
-    
+    setbuf(stdout, 0);
     do{
         system("cls");
         Menu();
+
         printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
         scanf("%d" , &opcion);
 

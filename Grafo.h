@@ -18,7 +18,7 @@
 typedef struct NodoGrafo{
     char nombrePais[25];
     struct Grafo *enlace;
-    struct Ataques *listaAtaques;
+    struct Ataques * listaAtaques;
 }NodoGrafo;
 
 typedef struct Ataques{
@@ -30,7 +30,7 @@ typedef struct Arista{
     int  idtipo;
     int   idciberdelincuente;
     int datosAfectados; //en Gigabytes
-    double tiempo; //duración del ciberataque en segundos similar al peso
+    float tiempo; //duración del ciberataque en segundos similar al peso
 }Arista;
 //VARIABLE INICIALIZADORA DEL GRAFO
 
@@ -44,9 +44,9 @@ typedef struct Arista{
 
 
 NodoGrafo * nuevoVertice(NodoGrafo** ngrafo, char * nombre);
-NodoGrafo * obtenerVertice(NodoGrafo** pGrafo, char * nombre); //obtiene el vertice del grafo, null si no existe
+NodoGrafo * obtenerVertice(NodoGrafo* pGrafo, char * nombre); //obtiene el vertice del grafo, null si no existe
 NodoGrafo * insertarVertice(NodoGrafo** pGrafo, NodoGrafo* nuevo);
-Arista * crearArista(int tipoDeCiberataque, int ciberdelincuente, int datos, double tiempo);
+Arista * crearArista(int tipoDeCiberataque, int ciberdelincuente, int datos, float tiempo);
 Arista * buscarArista(NodoGrafo** paisGrafo,char * origen ,char * destino); //obtiene un arista
 
 int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino);
@@ -65,18 +65,21 @@ NodoGrafo* nuevoVertice(NodoGrafo** ngrafo,char *pais){
     return nuevo;
 }
 NodoGrafo * insertarVertice(NodoGrafo** pGrafo, NodoGrafo* nuevo){
-    NodoGrafo * primero  = *pGrafo; //el primero se recorre hasta el útlimo
-    if(primero == NULL){
+    NodoGrafo * ultimo  = *pGrafo; //el primero se recorre hasta el útlimo
+    if(ultimo == NULL){
         *pGrafo = nuevo; //será el primero
     }else{
-        for(;primero->enlace;){
-            primero = primero->enlace;//recorre hasta que llegue al ultimo
+        for(;ultimo->enlace;){
+            ultimo = ultimo->enlace;//recorre hasta que llegue al ultimo
         }
-        primero->enlace = nuevo; //se asigna una vez que llegue al final
+        ultimo->enlace = nuevo; //se asigna una vez que llegue al final
     }
 }
-NodoGrafo * obtenerVertice(NodoGrafo** primero, char * nombre){ //obtiene un nodo en el grafo
-    NodoGrafo * recorrido = *primero;
+NodoGrafo * obtenerVertice(NodoGrafo* primero, char * nombre){ //obtiene un nodo en el grafo
+    if(primero == NULL){
+        return NULL;
+    }
+    NodoGrafo * recorrido = primero;
     for(; recorrido->enlace;){
         if(strcmp(recorrido->nombrePais, nombre)){
             return recorrido;
@@ -86,7 +89,7 @@ NodoGrafo * obtenerVertice(NodoGrafo** primero, char * nombre){ //obtiene un nod
     }
     return NULL;
 }
-Arista * crearArista(int tipoDeCiberataque, int ciberdelincuente, int datos, double tiempo){
+Arista * crearArista(int tipoDeCiberataque, int ciberdelincuente, int datos, float tiempo){
     Arista* nuevaArista;
     nuevaArista = (Arista*) malloc(sizeof (Arista));
     nuevaArista->idciberdelincuente = ciberdelincuente;
@@ -111,11 +114,13 @@ Arista * buscarArista(NodoGrafo** paisGrafo,char * origen ,char * destino){ //ob
 Ataques * buscarAtaque(NodoGrafo* procedenteGrafo, char *destino){
     NodoGrafo * pais = procedenteGrafo;
     Ataques * primero  = pais->listaAtaques;
-    for (; primero->siguiente;){
-        if(strcmp(primero->destino, destino)){
-            return primero;
+    if(primero != NULL){
+        for (; primero->siguiente;){
+            if(strcmp(primero->destino, destino)){
+                return primero;
+            }
+            primero = primero->siguiente;
         }
-        primero = primero->siguiente;
     }
     return NULL;
 }
@@ -126,62 +131,59 @@ void agregarAtaque(NodoGrafo * procedente, Ataques * ataque){
         primero = ataque;
     }else {
         Ataques *ultimo;
-        for (; primero->siguiente;) {
+        while (primero!=NULL){
             primero = primero->siguiente;
         }
         ultimo = primero;
         ultimo->siguiente = ataque;
     }
 }
-Ataques * crearAtaque(NodoGrafo * procedente, char * destino, TipoDeCiberataque * lTipos, Ciberdelincuente * lDelicuentes){
+Ataques * crearAtaque(NodoGrafo * procedente, char * destino, TipoDeCiberataque * tipo, Ciberdelincuente * delicuente,
+                      float tiempo, int datos){
     Ataques * nuevoAtaque;
     nuevoAtaque = (Ataques*) malloc(sizeof (Ataques));
-    nuevoAtaque->destino;
-    int tipo, idCiberDelincuente,datos;
-    double tiempo;
-    do {
-
-        printf("Ingrese el tipo del ciberataque: ");
-        scanf("%d", &tipo);
-
-    }while(tipoExiste(lTipos, &tipo));
-    do {
-
-        printf("Ingrese el id del delincuente: ");
-        scanf("%d", &idCiberDelincuente);
-
-    }while(tipoExiste(lTipos, &tipo));
-
-    printf("Ingrese el tiempo que duró el ciber ataque: ");
-    scanf("%lf", &tiempo);
-    printf("Ingrese la cantidad de datos que fueron afectados ");
-    scanf("%d", &datos);
-    Arista * arista = crearArista(tipo,idCiberDelincuente, datos, tiempo);
+    strcpy(nuevoAtaque->destino, destino);
+    Arista * arista = crearArista(tipo->codigo,delicuente->id, datos, tiempo);
     nuevoAtaque->arista = arista;
-    agregarAtaque(procedente, nuevoAtaque);
-    printf("¡Ataque agregado!");
-
+    return nuevoAtaque;
 }
 
 
-
-
-
-
-
-
 int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
-                   TipoDeCiberataque * tipo, Ciberdelincuente* delincuente, double tiempo, int datos){
+                   TipoDeCiberataque * tipo, Ciberdelincuente* delincuente, float tiempo, int datos){
     NodoGrafo * nodoProcedente = obtenerVertice(pGrafo, procedente->nombre);
-    char * nombDestino = destino->nombre;
+    if(nodoProcedente ==NULL){ //en caso de que no exista deberá crear el vertice
+        nodoProcedente = nuevoVertice(pGrafo, procedente->nombre); //lo crea
+        insertarVertice(&pGrafo,nodoProcedente); //inserta el nuevo en el grafo
+        printf("\nNuevo nodo insertado\n");
+    }else{
+        printf("\nEl nodo ya está en el grafo\n");
+    }
+    NodoGrafo * nodoDestino = obtenerVertice(pGrafo, destino->nombre); //el ataque guarda el nombre del destino, no el nodo, aún así debemos verificar que esté en el grafo
+    if(nodoDestino == NULL){
+        nodoDestino = nuevoVertice(pGrafo, destino->nombre);
+        insertarVertice(&pGrafo,nodoDestino);
+        printf("\nNuevo nodo insertado\n");
+    }else{
+        printf("\nEl nodo ya está en el grafo\n");
+    };
+
+
     Ataques * ataque;
-    ataque = buscarAtaque(nodoProcedente, procedente->nombre);
+    ataque = buscarAtaque(nodoProcedente, destino->nombre);
     if(ataque==NULL){
-        ataque = crearAtaque(nodoProcedente, destino->nombre, tipo, delincuente);
+        ataque = crearAtaque(nodoProcedente, destino->nombre, tipo, delincuente, tiempo, datos);
         agregarAtaque(nodoProcedente, ataque);
-        printf("\n->Ataque agregado\n");
+
+        printf("\n¡Ataque registrado exitosamente!\n");
     }else{
         printf("\n->El ataque ya existe en el registro<-\n");
+        printf("\n== Nombre del país atacado: %s", destino->nombre);
+        printf("\n== id ciberlincuente: %d", ataque->arista->idciberdelincuente);
+        printf("\n== id tipo del ciberataque: %d", ataque->arista->idtipo);
+        printf("\n== Cantidad de datos afectados: %d", ataque->arista->datosAfectados);
+        printf("\n== Tiempo de duración: %f", ataque->arista->tiempo);
+        printf("\n->Si desea modificarlo deberá ingresar a la opción de modificar ciberataques-\n");
     }
 }
 

@@ -31,7 +31,8 @@ typedef struct Mensaje{
     char detalle[TAMMENSAJE];
 }Mensaje;
 
-NodoPila * tope = NULL;
+NodoPila tope;
+
 //=====================================================================================================================
 //                                           Definción de funciones
 //=====================================================================================================================
@@ -44,7 +45,7 @@ void push(NodoPila** pila,Mensaje *mensaje);
 void pop(NodoPila** pila);//quita el último elemento
 int pilaVacia(NodoPila* pila);
 Mensaje *cima(NodoPila* pila);
-
+void Notificar(NodoPila** pila ,char * paisdestino);
 Mensaje* crearMensaje(char * pais, char m[TAMMENSAJE]);
 //=====================================================================================================================
 //                                              Funciones
@@ -66,6 +67,18 @@ void pop(NodoPila** pila){
         (*pila) = (*pila)->siguiente;
         free(f);
     }
+}
+void consultarTodaLaPila(NodoPila** pila){
+    Mensaje * mensaje;
+    char msmDescifrado[TAMMENSAJE];
+    while (!pilaVacia(*pila)){
+        mensaje = cima(*pila);
+        descifrar(msmDescifrado, mensaje->detalle);
+        printf("->Pais receptor %s",mensaje->receptor);
+        printf("->Detalle descifrado: \n %s", msmDescifrado);
+        pop(pila);
+    }
+    printf("SIN MÁS MENSAJES QUE MOSTRÁR");
 }
 Mensaje* crearMensaje(char * pais, char m[TAMMENSAJE] ){
     Mensaje *nuevo;
@@ -131,8 +144,9 @@ int ord(char c)
     return (int)c;
 }
 
-void Notificar(NodoPila *pila,char * paisdestino){
-    char mensaje[TAMMENSAJE], mensajeCifrado[TAMMENSAJE];
+void Notificar(NodoPila** pila ,char * paisdestino){
+    char mensaje[TAMMENSAJE] ="";
+    char mensajeCifrado[TAMMENSAJE] = "";
     printf("Escribe el mensaje a cifrar: ");
     fgets(mensaje,TAMMENSAJE,stdin); //evita desbordamientos
     mensaje[strcspn(mensaje, "\r\n")]=0; //quita saltos de linea
@@ -157,21 +171,17 @@ Mensaje * cima(NodoPila* pila){
     }
 }
 
-void consultarUltimoMensaje(NodoPila *pila){
+void consultarUltimoMensaje(NodoPila** pila){
     char descifrado[TAMMENSAJE];
-    if(!pilaVacia(pila)){
+    if(!pilaVacia(*pila)){
         Mensaje *msm = cima(pila);
         descifrar(msm->detalle,descifrado);
         printf("País de destino: %s",msm->receptor);
         printf("Mensaje: %s",descifrado);
+        pop(pila);
     }else{
         printf("Ya no hay más mensajes");
     }
 }
-void consultarTodoMensaje(NodoPila *pila){
-    while (!pilaVacia(pila)){
-        consultarUltimoMensaje(pila);
-        consultarTodoMensaje(pila->siguiente);
-    }
-}
+
 #endif //MPAULA_C_MENSAJE_H

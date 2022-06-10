@@ -119,7 +119,7 @@ Ciberdelincuente * obtenerCiberdelicuente(int id){
         }
         aux = aux->siguiente;
     }
-    return NULL
+    return NULL;
 }
 
 #endif //MPAULA_C_CIBERDELINCUENTE_H
