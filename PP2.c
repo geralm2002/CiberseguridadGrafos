@@ -201,17 +201,18 @@ void opcionRegistraCiberAtaque(){
     } while (ciberdelincuente== NULL);
     printf("\nInserte la cantidad de datos afectados en gigabytes: ");
     scanf("%d", &datosAfectados);
-    printf("\nInserte el tiempo de duración: ");
+    printf("\nInserte el tiempo de duracinn: ");
     scanf("%f", &tiempoDuracion);
-    realizarAtaque(grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
+    realizarAtaque(&grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
     printf( "Enviar notificacion a %s ",pDestino->nombre);
     Notificar(&pila, pDestino->nombre);
-
-
+    fflush(stdin);
+    primeroGrafo = grafo;
 }
 
 int datosGestionarCiberAtaques(){
     int opcion;
+    fflush(stdin);
     printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
     scanf("%d" , &opcion);
     switch (opcion) {
@@ -219,7 +220,7 @@ int datosGestionarCiberAtaques(){
             opcionRegistraCiberAtaque();
             break;
         case 2:
-            //modificar información de un ciber ataque
+            modficarCiberAtaque(&primeroGrafo);
             break;
         case 3:
             char procedente[25], destino[25];
@@ -227,7 +228,7 @@ int datosGestionarCiberAtaques(){
             scanf("%s", &procedente);
             printf("->Ingrese el nombre del pais de destino");
             scanf("%s", &destino);
-            int resultado  =eliminarUnCiberAtaque(primeroGrafo, procedente, destino);
+            int resultado  =eliminarUnCiberAtaque(&primeroGrafo, procedente, destino);
             if(resultado){
                 printf("Ataque eliminado exitosamente!");
             }else{
@@ -258,9 +259,9 @@ int datosGestionarCiberAtaques(){
     return 1;
 }
 void menuGestionarCiberAtaques(){
-    int repite;
+    int repite = 0;
     do{
-        printf("\n     ---------------Submenú gestion de ciberataques(grafos)----------------------------------\n");
+        printf("\n     ---------------Submenu gestion de ciberataques(grafos)----------------------------------\n");
         printf("\t\t[01]. Registrar ciberataque\n");
         printf("\t\t[02]. Editar informacion de un ciberataque\n");
         printf("\t\t[03]. Eliminar un ciberataque\n");
