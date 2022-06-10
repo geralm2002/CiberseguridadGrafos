@@ -21,7 +21,11 @@ void titulo() {
 	printf("\t\t                 Paula Catillo \n");
 	printf("     ------------------------------------------------------------------------------\n");
 }
-
+/*==================================================================================================================
+ *
+ *                                        OPCIONES DEL SUBMENÚ DE TIPOS DE CIBERATAQUES
+ *
+ *==================================================================================================================*/
 int datosTipoCiberataques() {
     int opcion;
     printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
@@ -58,6 +62,11 @@ void menuTipoCiberataques(int repite) {
         repite = datosTipoCiberataques();
     } while(repite);
 }
+/*==================================================================================================================
+ *
+ *                                        OPCIONES DEL SUBMENÚ DE CIBERDELINCUENTES
+ *
+ *==================================================================================================================*/
 
 int datosCiberdelincuentes() {
     int opcion;
@@ -91,7 +100,11 @@ void menuCiberdelincuentes(int repite) {
         repite = datosCiberdelincuentes();
     } while(repite);
 }
-
+/*==================================================================================================================
+ *
+ *                                        OPCIONES DEL SUBMENÚ DE PAÍSES
+ *
+ *==================================================================================================================*/
 int datosPaises() {
     int codigo;
     int habitantes;
@@ -153,6 +166,11 @@ void menuPaises(int repite) {
         repite = datosPaises();
     } while(repite);
 }
+/*==================================================================================================================
+ *
+ *                                        OPCIONES DEL SUBMENÚ DE GRAFOS
+ *
+ *==================================================================================================================*/
 void opcionRegistraCiberAtaque(){
     NodoGrafo * grafo = primeroGrafo;
     int codigoPaisProcedente,
@@ -176,7 +194,7 @@ void opcionRegistraCiberAtaque(){
     } while (pProcedente==NULL);
     //Obtener país de destino válido
     do{
-        printf("\n->Inserte codigo del país de destino: ");
+        printf("\n->Inserte codigo del pais de destino: ");
         scanf("%d", &codigoPaisDestino);
         pDestino = buscarPorCodigo(raiz, codigoPaisDestino);
         if(pDestino==NULL)
@@ -201,20 +219,74 @@ void opcionRegistraCiberAtaque(){
     } while (ciberdelincuente== NULL);
     printf("\nInserte la cantidad de datos afectados en gigabytes: ");
     scanf("%d", &datosAfectados);
-    printf("\nInserte el tiempo de duracinn: ");
+    printf("\nInserte el tiempo de duracion: ");
     scanf("%f", &tiempoDuracion);
-    realizarAtaque(&grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
-    printf( "Enviar notificacion a %s ",pDestino->nombre);
-    Notificar(&pila, pDestino->nombre);
-    fflush(stdin);
-    primeroGrafo = grafo;
+    int respuesta = realizarAtaque(&grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
+    if(respuesta){
+        printf( "Enviar notificacion a %s ",pDestino->nombre);
+        Notificar(&pila, pDestino->nombre);
+        fflush(stdin);
+        primeroGrafo = grafo;
+    }
 }
 
+void opcionEliminarTodoAtaque(){
+    int idprocedente;
+    Pais * paisProcedente;
+    do {
+        printf("\n->Ingrese el id del pais que desea eliminar todos sus ataques: ");
+        scanf("%d", &idprocedente);
+        fflush(stdin);
+        paisProcedente= obtenerPais(raiz,idprocedente);
+        if(paisProcedente==NULL){
+            printf("El país no existe registrado en el árbol\n intente de nuevo");
+        }
+    } while (paisProcedente== NULL);
+
+    NodoGrafo * nodoPaisG = obtenerVertice(primeroGrafo, paisProcedente->nombre);
+    if(nodoPaisG != NULL){
+        eliminarAtaquesPorPais(nodoPaisG);
+        printf("\nAtaques eliminados\n");
+    }else{
+        printf("\nPor favor ingrese un pais registrado en el grafo\n");
+    }
+}
+void opcionEliminarUnCiberAtaque(){
+    int idprocedente, iddestino;
+    Pais * paisProcedente;
+    Pais * paisDestino;
+    do {
+        printf("->Ingrese el id del pais que realizo el ataque: ");
+        scanf("%d", &idprocedente);
+        fflush(stdin);
+        paisProcedente= obtenerPais(raiz,idprocedente);
+        if(paisProcedente==NULL){
+            printf("El país no existe registrado en el árbol\n intente de nuevo");
+        }
+    } while (paisProcedente== NULL);
+    do{
+        printf("->Ingrese el id del pais de destino");
+        scanf("%d", &iddestino);
+        fflush(stdin);
+        paisDestino= obtenerPais(raiz,iddestino);
+        if(paisDestino==NULL)
+            printf("El país no existe registrado en el árbol");
+    }while(paisDestino==NULL);
+    //los whiles verfican que estén registrados mas no que estén en el grafo y que tengan un ciber ataque
+    int resultado  =eliminarUnCiberAtaque(&primeroGrafo, paisProcedente->nombre, paisDestino->nombre);
+    if(resultado){
+        printf("Ataque eliminado exitosamente!");
+    }else{
+        printf("El ciberataque no se encontro, intente de nuevo");
+    }
+}
 int datosGestionarCiberAtaques(){
     int opcion;
     fflush(stdin);
     printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
     scanf("%d" , &opcion);
+
+
     switch (opcion) {
         case 1:
             opcionRegistraCiberAtaque();
@@ -223,30 +295,10 @@ int datosGestionarCiberAtaques(){
             modficarCiberAtaque(&primeroGrafo);
             break;
         case 3:
-            char procedente[25], destino[25];
-            printf("->Ingrese el nombre del pais que realizo el ataque");
-            scanf("%s", &procedente);
-            printf("->Ingrese el nombre del pais de destino");
-            scanf("%s", &destino);
-            int resultado  =eliminarUnCiberAtaque(&primeroGrafo, procedente, destino);
-            if(resultado){
-                printf("Ataque eliminado exitosamente!");
-            }else{
-                printf("El ciberataque no se encontró");
-            }
+            opcionEliminarUnCiberAtaque();
             break;
         case 4:
-            //eliminar todos los ataques de un pais
-            printf("\n->Ingrese el nombre del pais que desea eliminar");
-            char pais[25];
-            scanf("%s", &pais);
-            NodoGrafo * nodo = obtenerVertice(&primeroGrafo, pais);
-            if(nodo != NULL){
-                eliminarAtaquesPorPais(nodo);
-                printf("\nAtaques eliminados\n");
-            }else{
-                printf("\nPor favor ingrese un pais registrado en el grafo\n");
-            }
+            opcionEliminarTodoAtaque();
             break;
         case 5:
             consultarGrafo(primeroGrafo);
@@ -256,6 +308,8 @@ int datosGestionarCiberAtaques(){
         default:
             printf("Error: Favor ingresar uno de los numeros que se muestran en el menu!\n");
     }
+    printf("\nPresione una tecla para continuar...");
+    system("pause>nul");
     return 1;
 }
 void menuGestionarCiberAtaques(){
@@ -265,13 +319,18 @@ void menuGestionarCiberAtaques(){
         printf("\t\t[01]. Registrar ciberataque\n");
         printf("\t\t[02]. Editar informacion de un ciberataque\n");
         printf("\t\t[03]. Eliminar un ciberataque\n");
-        printf("\t\t[04]. Eliminar todos los ciberataques de un país\n");
-        printf("\t\t[05]. Consultar toda la información de ciberataques\n");
+        printf("\t\t[04]. Eliminar todos los ciberataques de un pais\n");
+        printf("\t\t[05]. Consultar toda la informacion de ciberataques\n");
         printf("\t\t[06]. Volver\n");
         repite = datosGestionarCiberAtaques();
     } while (repite);
 
 }
+/*==================================================================================================================
+ *
+ *                                        OPCIONES MENÚ Y ANEXOS AL PROGRAMA PRINCIPAL
+ *
+ *==================================================================================================================*/
 void Menu() {
     titulo();
     printf("\t\t[01]. Menu tipo ciberataque\n"); //

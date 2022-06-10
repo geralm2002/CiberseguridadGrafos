@@ -148,7 +148,8 @@ void Notificar(NodoPila** pila ,char * paisdestino){
     char mensaje[TAMMENSAJE] = "";
     char mensajeCifrado[TAMMENSAJE]="";
     printf("Escribe el mensaje a cifrar: \n");
-    scanf("%s",mensaje); //evita desbordamientos
+    fflush(stdin);
+    fgets(mensaje, TAMMENSAJE, stdin);
     mensaje[strcspn(mensaje, "\r\n")]=0; //quita saltos de linea
     cifrar(mensaje,mensajeCifrado);
     printf("El mensaje cifrado es: %s\n", mensajeCifrado);

@@ -158,6 +158,8 @@ int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
         agregarAtaque(nodoProcedente, ataque);
 
         printf("\n¡Ataque registrado exitosamente!\n");
+        (*pGrafo) = nodoProcedente;
+        return 1;
     }else{
         printf("\n->El ataque ya existe en el registro<-\n");
         printf("\n== Nombre del país atacado: %s", destino->nombre);
@@ -166,6 +168,7 @@ int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
         printf("\n== Cantidad de datos afectados: %d", ataque->arista->datosAfectados);
         printf("\n== Tiempo de duración: %f", ataque->arista->tiempo);
         printf("\n->Si desea modificarlo deberá ingresar a la opción de modificar ciberataques-\n");
+        return 0;
     }
 }
 
@@ -180,32 +183,39 @@ int eliminarAtaquesPorPais(NodoGrafo* pais){
     }
     pais->listaAtaques = NULL;
 }
-int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino){
+int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino) {
     /*los datos afectados hacen más específica la búsqueda ya que un país podría tener varios ataques desde un mismo país
      * desde un mismo ciberdelincuente, del mismo tipo de ciber ataque también*/
-    NodoGrafo * procedente = obtenerVertice(grafo, origen);
-    if(procedente==NULL){
+    NodoGrafo *vertice = obtenerVertice(grafo, origen);
+    if (vertice != NULL) {
+        Ataques *ady = vertice->listaAtaques;
+        Ataques *ant = NULL;
+        while (ady) {
+            if (strcmp(ady->destino, destino) == 0) {
+                if (ant == NULL) { //anterior nulo
+                    vertice->listaAtaques = ady->siguiente;
+                } else {
+                    ant->siguiente = ady->siguiente;
+                }
+                free(ady);
+                ady = NULL;
+                return 1;
+            } else {
+                ant = ady;
+                ady = ady->siguiente;
+            }
+
+        }
+    }else{
+
         return 0;
     }
-    NodoGrafo * encontrado  = buscarAtaque(procedente,  destino);
+
+
+
     //para saber si el ataque que deseamos eliminar existe
-    Ataques * actual;
-    Ataques * anterior;
-    if(encontrado!= NULL){
-        actual = encontrado->listaAtaques;
-        anterior= NULL;
-        actual = actual->siguiente;
-        /*Enlace del nodo anterior con siguiente*/
-        if (actual!=NULL){
-            if(actual == encontrado->listaAtaques){//distingue entre el nodo cabecera o el resto de la lista
-                encontrado->listaAtaques = actual->siguiente;
-            }else{
-                anterior ->siguiente = actual->siguiente;
-            }
-            return 1;
-        }
-        free(actual);
-    }
+
+
     return 0;
 }
 
@@ -234,12 +244,27 @@ void consultarGrafo(NodoGrafo * pNodoGrafo){
     }
 }
 int modficarCiberAtaque(NodoGrafo ** primero){
-    char paisProcedente[25], paisDestino[25];
-    printf("\nIngrese eñ país que realiza el ciberAtaque: ");
-    scanf("%s", &paisProcedente);
-    printf("\nIngrese el pais atacado: ");
-    scanf("%s", &paisDestino);
-    Arista * arista = buscarArista(primero, paisProcedente, paisDestino);
+    int idProcedente, idDestino;
+    NodoGrafo * paisProcedente, * paisDestino;
+    do {
+        printf("\nIngrese el id pais que realizo el ciberAtaque: ");
+        scanf("%d", &idProcedente);
+        paisProcedente = obtenerPais(raiz, idProcedente);
+        if(paisProcedente == NULL){
+            printf("El pais no se encuentra registrado");
+        }
+    }while(paisProcedente== NULL);
+
+    do{
+        printf("\nIngrese el pais que recibio el ataque: ");
+        scanf("%d", &idDestino);
+        paisDestino = obtenerPais(raiz, idDestino);
+        if(paisDestino==NULL){
+            printf("El país de destino no esta registado");
+        }
+    } while (paisDestino== NULL);
+
+    Arista * arista = buscarArista(primero, paisProcedente->nombrePais, paisDestino->nombrePais);
     TipoDeCiberataque * ciberataque;
     Ciberdelincuente *  ciberdelincuente;
     if(arista!=NULL){
