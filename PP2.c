@@ -219,12 +219,36 @@ int datosGestionarCiberAtaques(){
             opcionRegistraCiberAtaque();
             break;
         case 2:
+            //modificar información de un ciber ataque
             break;
         case 3:
+            char procedente[25], destino[25];
+            printf("->Ingrese el nombre del pais que realizo el ataque");
+            scanf("%s", &procedente);
+            printf("->Ingrese el nombre del pais de destino");
+            scanf("%s", &destino);
+            int resultado  =eliminarUnCiberAtaque(primeroGrafo, procedente, destino);
+            if(resultado){
+                printf("Ataque eliminado exitosamente!");
+            }else{
+                printf("El ciberataque no se encontró");
+            }
             break;
         case 4:
+            //eliminar todos los ataques de un pais
+            printf("\n->Ingrese el nombre del pais que desea eliminar");
+            char pais[25];
+            scanf("%s", &pais);
+            NodoGrafo * nodo = obtenerVertice(&primeroGrafo, pais);
+            if(nodo != NULL){
+                eliminarAtaquesPorPais(nodo);
+                printf("\nAtaques eliminados\n");
+            }else{
+                printf("\nPor favor ingrese un pais registrado en el grafo\n");
+            }
             break;
         case 5:
+            consultarGrafo(primeroGrafo);
             break;
         case 6:
             return 0;

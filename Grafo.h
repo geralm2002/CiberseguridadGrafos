@@ -191,7 +191,7 @@ int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
 int eliminarAtaquesPorPais(NodoGrafo* pais){
     Ataques * ataques = pais->listaAtaques;
     Ataques * aux = ataques;
-    for(;ataques->siguiente;){
+    while (ataques!=NULL){
         aux = ataques;
         ataques = ataques->siguiente;
         free(aux);
@@ -227,7 +227,30 @@ int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino){
     return 0;
 }
 
-
+void consultarGrafo(NodoGrafo * pNodoGrafo){
+    NodoGrafo * primero = pNodoGrafo;
+    Ataques * ataquesXnodo; //ataques por cada nodo del grafo
+    Arista * arista;
+    printf("\n--------Información del grafo-------\n");
+    while(primero!=NULL){
+        ataquesXnodo = primero->listaAtaques;
+        if(ataquesXnodo==NULL){
+            printf("%s no hizo ningún ataque \n", primero->nombrePais);
+        }else{
+            printf("%s atacó a: ", primero->nombrePais);
+            while(ataquesXnodo !=NULL){
+                printf("\n--> %s ",ataquesXnodo->destino);
+                arista = ataquesXnodo->arista;
+                printf("\n\t\t ID del ciberdelincuente: %d", arista->idciberdelincuente);
+                printf("\n\t\t ID del tipo del ciber ataque: %d", arista->idtipo);
+                printf("\n\t\t Cantidad de datos afectados: %d", arista->datosAfectados);
+                printf("\n\t\t Tiempo de duración del ciberAtaque: %f", arista->tiempo);
+                ataquesXnodo = ataquesXnodo->siguiente;
+            }
+        }
+        primero = primero->enlace;
+    }
+}
 
 
 #endif //MPAULA_C_GRAFO_H
