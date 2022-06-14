@@ -15,6 +15,15 @@ Ciberdelincuente* listaCD = NULL;
 Ciberdelincuente* finalCD = NULL;
 
 //Funciones Ciberdelincuente
+int getTamannoCiberdelincuente(){
+    Ciberdelincuente * puntero = listaCD;
+    int cantidad = 0;
+    while (puntero!=NULL){
+        cantidad = cantidad+1;
+        puntero = puntero->siguiente;
+    }
+    return cantidad;
+}
 void insertarCiberdelincuente(int id, char* grupo, char* paisorigen, char* ataques[]) {
 
     Ciberdelincuente* puntero = (Ciberdelincuente*) malloc(sizeof(Ciberdelincuente));       //Se crea un puntero en donde se guarda el nuevo nodo
@@ -120,6 +129,13 @@ Ciberdelincuente * obtenerCiberdelicuente(int id){
         aux = aux->siguiente;
     }
     return NULL;
+}
+Ciberdelincuente * getDelincuenteByIndex(int i){
+    Ciberdelincuente * puntero = listaCD;
+    for(int j = 0 ; j< i ; j++){
+        puntero = puntero ->siguiente;
+    }
+    return puntero;
 }
 
 #endif //MPAULA_C_CIBERDELINCUENTE_H

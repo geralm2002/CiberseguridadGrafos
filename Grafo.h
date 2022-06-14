@@ -66,7 +66,7 @@ NodoGrafo* nuevoVertice(NodoGrafo** ngrafo,char *pais){
 }
 void insertarVertice(NodoGrafo** pGrafo, NodoGrafo* nuevo){
     nuevo->enlace = *pGrafo;
-    *pGrafo = nuevo;
+    (*pGrafo) = nuevo;
 }
 NodoGrafo * obtenerVertice(NodoGrafo* primero, char * nombre){ //obtiene un nodo en el grafo
     if(primero == NULL){
@@ -131,7 +131,7 @@ Ataques * crearAtaque(char * destino, TipoDeCiberataque * tipo, Ciberdelincuente
 }
 
 
-int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
+NodoGrafo * realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
                    TipoDeCiberataque * tipo, Ciberdelincuente* delincuente, float tiempo, int datos){
     NodoGrafo * nodoProcedente = obtenerVertice(*pGrafo, procedente->nombre);
     if(nodoProcedente ==NULL){ //en caso de que no exista deberá crear el vertice
@@ -159,7 +159,7 @@ int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
 
         printf("\n¡Ataque registrado exitosamente!\n");
         (*pGrafo) = nodoProcedente;
-        return 1;
+        return nodoProcedente;
     }else{
         printf("\n->El ataque ya existe en el registro<-\n");
         printf("\n== Nombre del país atacado: %s", destino->nombre);
@@ -168,8 +168,9 @@ int realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
         printf("\n== Cantidad de datos afectados: %d", ataque->arista->datosAfectados);
         printf("\n== Tiempo de duración: %f", ataque->arista->tiempo);
         printf("\n->Si desea modificarlo deberá ingresar a la opción de modificar ciberataques-\n");
-        return 0;
+        return NULL;
     }
+
 }
 
 //obtiene el vertice según el codigo, devuleve null en caso de no encontrarlo
@@ -302,6 +303,7 @@ int modficarCiberAtaque(NodoGrafo ** primero){
     }
     return 0;
 }
+
 
 
 #endif //MPAULA_C_GRAFO_H

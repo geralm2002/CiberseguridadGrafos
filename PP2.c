@@ -6,12 +6,13 @@
 # include "Ciberdelincuente.h"
 # include "Pais.h"
 #include "MensajePila.h"
-
+#include <time.h>
 /*============================================================================================================================================*/
 //Menus y recoleccion de datos
 NodoGrafo * primeroGrafo = NULL;
-NodoPila pila ;
-
+NodoPila * pila ;
+#define MAX_DATOSAFECTADOS 5000
+#define MAX_TIEMPO 5000
 
 void titulo() {
     system("cls");
@@ -168,6 +169,45 @@ void menuPaises(int repite) {
 }
 /*==================================================================================================================
  *
+ *                               OPCIONES DEL SUBMENÚ DE MENSAJE DE CIFRADO EN PILA
+ *
+ *==================================================================================================================*/
+int datosGestionarMensajes(){
+    int opcion;
+    fflush(stdin);
+    printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
+    scanf("%d" , &opcion);
+    fflush(stdin);
+    switch (opcion) {
+        case 1:
+            consultarUltimoMensaje(&pila);
+            break;
+        case 2:
+            consultarTodaLaPila(&pila);
+            break;
+        case 3:
+            return 0;
+        default:
+            printf("Error: Favor ingresar uno de los numeros que se muestran en el menu!\n");
+    }
+    printf("\nPresione una tecla para continuar...");
+    system("pause>nul");
+    return 1;
+
+}
+void menuMensajeCifrado(){
+    int repite = 0;
+    do{
+        printf("\n     ---------------Submenu gestion de mensajes cifrados(pila)----------------------------------\n");
+        printf("\t\t[01]. Consultar el ultimo mensaje de la pila\n");
+        printf("\t\t[02]. Consultar toda la pila\n");
+        printf("\t\t[03]. Volver\n");
+        repite = datosGestionarMensajes();
+    } while (repite);
+
+}
+/*==================================================================================================================
+ *
  *                                        OPCIONES DEL SUBMENÚ DE GRAFOS
  *
  *==================================================================================================================*/
@@ -221,7 +261,7 @@ void opcionRegistraCiberAtaque(){
     scanf("%d", &datosAfectados);
     printf("\nInserte el tiempo de duracion: ");
     scanf("%f", &tiempoDuracion);
-    int respuesta = realizarAtaque(&grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
+    NodoGrafo* respuesta = realizarAtaque(&grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
     if(respuesta){
         printf( "Enviar notificacion a %s ",pDestino->nombre);
         Notificar(&pila, pDestino->nombre);
@@ -361,6 +401,44 @@ void insertarDatosManuales(){
     insertarPais(raiz, 61, "Australia" , 2569000, "Asia");
     insertarPais(raiz, 380, "Ucrania" , 4413000, "Europa");
 }
+int getAleatorio(int max){
+    int a=(int) ((double)rand() /((double)RAND_MAX +1) * max);
+    return a;
+}
+
+void simularAtaques(){
+    NodoGrafo * grafo = primeroGrafo;
+    int cantidAtaques;
+    printf("Ingrese la cantidad de ciberataques que desea simular: ");
+    scanf("%d", &cantidAtaques);
+    int tamTipo = getTamannoTipoCiberAtaque(); //maximo de tipos de la lista para generar un aleatorio en ese rango
+    int tamDelincuente = getTamannoCiberdelincuente(); //maximo de la lista de ciber delincuentes para generar un aleatorio en ese rango
+    for(int i = 0; i<cantidAtaques; i++){
+        int paisO, paisD,datos, tiempo;
+        Pais * origen, * destino;
+        Ciberdelincuente * delicuente;
+        TipoDeCiberataque * tipo;
+        do{
+            paisO=getAleatorio(248);
+            paisO = TERRITORIOS[paisO];
+            origen = obtenerPais(raiz, paisO);
+        }while(origen ==NULL);
+        do{
+            paisD = TERRITORIOS[getAleatorio(248)];
+            destino = obtenerPais(raiz, paisD); //obtienee hasta que exista en el arbol
+        }while(destino ==NULL);
+
+        delicuente = getDelincuenteByIndex(getAleatorio(tamDelincuente));
+        tipo = getTipoByIndex(getAleatorio(tamTipo-1));
+        datos = getAleatorio(MAX_DATOSAFECTADOS);
+        tiempo = getAleatorio(MAX_TIEMPO);
+        realizarAtaque(&grafo, origen, destino, tipo, delicuente, tiempo, datos);
+        primeroGrafo = grafo;
+    }
+    printf("Todos los ataques han sido registrados exitosamente");
+
+}
+
 /*============================================================================================================================================*/
 int main() {
     insertarDatosManuales();
@@ -388,10 +466,10 @@ int main() {
             case 4:
                 menuGestionarCiberAtaques();
             case 5:
-                //registro de mensaje de seguridad
+                menuMensajeCifrado();
                 break;
             case 6:
-                //simluacion
+                simularAtaques();
                 break;
             case 7:
                 //obtener rutas

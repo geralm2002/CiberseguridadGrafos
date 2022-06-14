@@ -64,9 +64,8 @@ void insertarPais(Pais* nodo, int codigo, char nombre[], int habitantes, char co
 }
 Pais * obtenerPais(Pais * nodo, int codigo){
     if(nodo == NULL){
-        printf("País no encontrado");
         return NULL;
-    }else if(nodo->codigo = codigo)
+    }else if(nodo->codigo == codigo)
         return nodo;
     else if(codigo < nodo->codigo) //Se identifica si el nodo debe ir a la izquierda o derecha
         obtenerPais(nodo->izquierda, codigo);

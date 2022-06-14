@@ -15,6 +15,15 @@ struct TipoDeCiberataque {
 };
 TipoDeCiberataque* listaTC = NULL;
 TipoDeCiberataque* finalTC = NULL;
+int getTamannoTipoCiberAtaque(){
+    TipoDeCiberataque * puntero = listaTC;
+    int cantidad = 0;
+    while(puntero!= NULL){
+        cantidad = cantidad+1;
+        puntero = puntero->siguiente;
+    }
+    return cantidad;
+}
 
 void insertarTipoCiberAtaque(int codigo, char* nombre, char* descripcion, char* canales[]) {
     TipoDeCiberataque* puntero = (TipoDeCiberataque*) malloc(sizeof(TipoDeCiberataque));    //Se crea un puntero en donde se guarda el nuevo nodo
@@ -119,6 +128,13 @@ TipoDeCiberataque * obtenerTipoCiberataque(int tipo){
         aux = aux->siguiente;
     }
     return NULL;
+}
+TipoDeCiberataque * getTipoByIndex(int i){
+    TipoDeCiberataque * puntero = listaTC;
+    for(int j = 0; j<i; j++){
+        puntero = puntero->siguiente;
+    }
+    return puntero;
 }
 
 
