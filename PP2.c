@@ -449,9 +449,8 @@ void analisisDeDatos(){
     cantidadPorTipoCiberataque(&primeroGrafo);
     printf("La cantidad total de ataques efectuados por ciberdelincuente corresponde a: \n");
     cantidadPorCiberDelincuente(&primeroGrafo);
-    //top 3 ciberdelincuentes
-    //top 3 países más atacados
-
+    topTresPaisesAtacados(&primeroGrafo);
+    topTresCiberDelincuentes(&primeroGrafo);
 }
 /*============================================================================================================================================*/
 int main() {

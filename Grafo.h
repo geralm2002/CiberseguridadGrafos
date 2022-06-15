@@ -54,7 +54,15 @@ int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino);
 /*=====================================================================================================================
  *                          Funciones
 =====================================================================================================================*/
-
+int getLenGrafo(NodoGrafo* ngrafo){
+    NodoGrafo * primero = ngrafo;
+    int cant = 0 ;
+    while(primero !=NULL){
+        cant++;
+        primero = primero->enlace;
+    }
+    return cant;
+}
 NodoGrafo* nuevoVertice(NodoGrafo** ngrafo,char *pais){
     NodoGrafo * nuevo;
     nuevo = (NodoGrafo*) malloc(sizeof(NodoGrafo));
@@ -389,6 +397,118 @@ void cantidadPorCiberDelincuente(NodoGrafo ** pGrafo){
         printf("El ciberdelincuente %d ha hecho %d ataques\n" ,lista->id, cantidad);
         lista = lista->siguiente;
     }
+}
+int getCantidadDeUnPais(NodoGrafo ** pGrafo, char * nombre){
+    NodoGrafo * primero = *pGrafo;
+    int cantidad = 0;
+    while (primero != NULL){
+        Ataques * lista = primero->listaAtaques;
+        while (lista !=NULL){
+            if(strcmp(lista->destino, nombre)== 0){
+                cantidad++;
+            }
+            lista = lista->siguiente;
+        }
+        primero = primero->enlace;
+    }
+    return cantidad;
+}
+int getCantidadPorCiberDelincuente(NodoGrafo** pGrafo, int id){
+    NodoGrafo  * primero = *pGrafo;
+    int cantidad = 0;
+    while(primero !=NULL){
+        Ataques * lista = primero->listaAtaques;
+        while (lista !=NULL){
+            if(lista->arista->idciberdelincuente == id ){
+                cantidad++;
+            }
+            lista = lista->siguiente;
+        }
+        primero = primero->enlace;
+    }
+    return cantidad;
+}
+
+void intercambiarNum(int *a, int *b) {
+    int temporal = *a;
+    *a = *b;
+    *b = temporal;
+}
+void intercambiarChar(char * a, char * b){
+    char temporal = *a;
+    *a = *b;
+    *b  = temporal;
+}
+void burbujaPaises(int arreglo[], char * arrN, int longitud) {
+    for (int x = 0; x < longitud; x++) {
+        for (int indiceActual = 0; indiceActual < longitud - 1;indiceActual++) {
+            int indiceSiguienteElemento = indiceActual + 1;
+            // Si el actual es mayor que el que le sigue a la derecha...
+            if (arreglo[indiceActual] > arreglo[indiceSiguienteElemento]) {
+                // ...intercambiarlos, es decir, mover el actual a la derecha y el de la derecha al actual
+                intercambiarNum(&arreglo[indiceActual], &arreglo[indiceSiguienteElemento]);
+                intercambiarChar( &arrN[indiceActual], &arrN[indiceSiguienteElemento]);
+
+            }
+        }
+    }
+}
+void burbujaCiberdelincuentes(int arreglo[], int arrN[], int longitud) {
+    for (int x = 0; x < longitud; x++) {
+        for (int indiceActual = 0; indiceActual < longitud - 1;indiceActual++) {
+            int indiceSiguienteElemento = indiceActual + 1;
+            // Si el actual es mayor que el que le sigue a la derecha...
+            if (arreglo[indiceActual] > arreglo[indiceSiguienteElemento]) {
+                // ...intercambiarlos, es decir, mover el actual a la derecha y el de la derecha al actual
+                intercambiarNum(&arreglo[indiceActual], &arreglo[indiceSiguienteElemento]);
+                intercambiarNum( &arrN[indiceActual], &arrN[indiceSiguienteElemento]);
+            }
+        }
+    }
+}
+void topTresPaisesAtacados(NodoGrafo ** pgrafo){
+    NodoGrafo * primero = *pgrafo;
+    int lenGrafo = getLenGrafo(*pgrafo);
+    int cantidadXpais[lenGrafo]; //para ordenar la lista de mayor a menor
+    char topList[lenGrafo][25];
+
+    int i = 0;
+    int ataques = 0;
+    while (primero !=NULL){
+        ataques = getCantidadDeUnPais(pgrafo, primero->nombrePais);
+        strcpy(topList[i], primero->nombrePais);
+        cantidadXpais[i] = ataques;
+        i++;
+        primero = primero -> enlace;
+    }
+    burbujaPaises(cantidadXpais, topList, lenGrafo);
+    printf("Los top tres paises mas atacados son: \n");
+    for (int j = 0 ; i < 3; i++){ //imprime del 1 al tres
+        printf("%d . %s \n", i, topList[i]);
+    }
+}
+void topTresCiberDelincuentes(NodoGrafo ** pGrafo){
+    NodoGrafo * primero = *pGrafo;
+    Ciberdelincuente * ciberDlist = listaCD;
+    int lenLista = getTamannoCiberdelincuente();
+    int listaCantidad[lenLista];
+    int listaid[lenLista]; //ambas son paralelas
+    int i = 0;
+    while(ciberDlist !=NULL){
+        primero = * pGrafo;
+        while (primero !=NULL){
+            listaCantidad[i]=  getCantidadPorCiberDelincuente(pGrafo, ciberDlist->id);
+            listaid[i] = ciberDlist->id;
+            primero = primero ->enlace;
+        }
+        ciberDlist = ciberDlist->siguiente;
+    }
+    burbujaCiberdelincuentes(listaCantidad, listaid, lenLista);
+    printf("Los top tres ciberdelincuentes: \n");
+    for (int j = 0 ; i < 3; i++){ //imprime del 1 al tres
+        printf("%d . ID: %d \n", i, listaid[i]);
+    }
+
 }
 
 
