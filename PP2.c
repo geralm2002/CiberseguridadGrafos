@@ -425,7 +425,7 @@ void simularAtaques(){
         }while(origen ==NULL);
         do{
             paisD = TERRITORIOS[getAleatorio(248)];
-            destino = obtenerPais(raiz, paisD); //obtienee hasta que exista en el arbol
+            destino = obtenerPais(raiz, paisD); //obtiene hasta que exista en el arbol
         }while(destino ==NULL);
 
         delicuente = getDelincuenteByIndex(getAleatorio(tamDelincuente));
@@ -472,7 +472,7 @@ int main() {
                 simularAtaques();
                 break;
             case 7:
-                //obtener rutas
+                //obtener rutas3
                 break;
             case 8:
                 //análisis de datos

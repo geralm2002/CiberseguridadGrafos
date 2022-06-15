@@ -113,7 +113,7 @@ void mostrarciberdelincuentes() {
 int ciberdelincuenteExiste(Ciberdelincuente* lista, int id){
     Ciberdelincuente * actual = lista;
     for(;actual->siguiente; ){
-        if(actual->id = id){
+        if(actual->id == id){
             return 1;
         }
         actual = actual->siguiente;

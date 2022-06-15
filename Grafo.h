@@ -303,7 +303,71 @@ int modficarCiberAtaque(NodoGrafo ** primero){
     }
     return 0;
 }
+int cantidadtotalCiberAtaques(NodoGrafo ** pgrafo){
+    NodoGrafo * unNodo = *pgrafo;
+    Ataques  * listaAtaques = NULL;
+    int cantidadTotal = 0;
+    while (unNodo){
+        listaAtaques = unNodo->listaAtaques;
+        while (listaAtaques !=NULL){
+            cantidadTotal++;
+            listaAtaques = listaAtaques ->siguiente;
+        }
+        unNodo = unNodo->enlace;
+    }
+    return cantidadTotal;
+}
+void cantidadEnviadosRecibidosXpais(NodoGrafo ** pgrafo){
+    NodoGrafo * unNodo = *pgrafo;
+    NodoGrafo * otroNodo;
+    Ataques  * listaAtaques;
+    int totalEnviados = 0;
+    int totalRecibidos = 0;
+    while (unNodo !=NULL){
+        otroNodo = *pgrafo;
+        totalEnviados = 0;
+        totalRecibidos = 0;
+        while (otroNodo != NULL){
+            listaAtaques = otroNodo->listaAtaques;
+            while (listaAtaques !=NULL){
+                if(strcmp(unNodo->nombrePais, listaAtaques->destino)==0){
+                    totalRecibidos++;
+                }
+                if(strcmp(otroNodo->nombrePais, unNodo->nombrePais)==0){
+                    totalEnviados++;
+                }
+                listaAtaques = listaAtaques->siguiente;
+            }
 
+            otroNodo = otroNodo->enlace;
+        }
+        printf("-> %s envio un total de %d ciberataques. \n", unNodo->nombrePais, totalEnviados);
+        printf("-> %s recibio un total de %d ciberataques.\n", unNodo->nombrePais, totalRecibidos );
+        printf("-------------------------------------------------------------");
+        unNodo = unNodo->enlace;
+    }
+}
+void cantidadPorTipoCiberataque(NodoGrafo **pgrafo){
+    NodoGrafo * unNodo = * pgrafo;
+    TipoDeCiberataque * lista = listaTC;
+    Ataques * listaAtaques;
+    int cantidad =0;
+    while (lista !=NULL){
+        cantidad = 0;
+        while (unNodo !=NULL){
+            listaAtaques = unNodo->listaAtaques;
+            while (listaAtaques!=NULL){
+                if(listaAtaques->arista->idtipo == lista->codigo){
+                    listaAtaques = listaAtaques->siguiente;
+                }
+            }
+            unNodo = unNodo->enlace;
+        }
+        lista = lista->siguiente;
+        printf("La cantidad de ciberataques enviados/recibidos por el tipo de ciberataque %s  es: %d", lista->nombre, cantidad);
+    }
+
+}
 
 
 #endif //MPAULA_C_GRAFO_H
