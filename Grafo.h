@@ -358,8 +358,9 @@ void cantidadPorTipoCiberataque(NodoGrafo **pgrafo){
             listaAtaques = unNodo->listaAtaques;
             while (listaAtaques!=NULL){
                 if(listaAtaques->arista->idtipo == lista->codigo){
-                    listaAtaques = listaAtaques->siguiente;
+                    cantidad++;
                 }
+                listaAtaques = listaAtaques->siguiente;
             }
             unNodo = unNodo->enlace;
         }
@@ -368,6 +369,29 @@ void cantidadPorTipoCiberataque(NodoGrafo **pgrafo){
     }
 
 }
+void cantidadPorCiberDelincuente(NodoGrafo ** pGrafo){
+    NodoGrafo * unNodo = *pGrafo;
+    Ciberdelincuente * lista = listaCD;
+    Ataques * listaAtaques;
+    int cantidad = 0;
+    while (lista !=NULL){
+        cantidad = 0;
+        while(unNodo != NULL){
+            listaAtaques = unNodo->listaAtaques;
+            while (listaAtaques !=NULL){
+                if(listaAtaques->arista->idciberdelincuente == lista->id){
+                    cantidad++;
+                }
+                listaAtaques = unNodo->listaAtaques;
+            }
+            unNodo = unNodo->enlace;
+        }
+        printf("El ciberdelincuente %d ha hecho %d ataques\n" ,lista->id, cantidad);
+        lista = lista->siguiente;
+    }
+}
+
+
 
 
 #endif //MPAULA_C_GRAFO_H

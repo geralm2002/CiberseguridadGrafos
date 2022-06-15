@@ -438,7 +438,21 @@ void simularAtaques(){
     printf("Todos los ataques han sido registrados exitosamente");
 
 }
+void analisisDeDatos(){
+    int cantidadTotal = 0;
+    printf("\n\n-----------Analisis de datos -----------\n\n");
+    cantidadTotal = cantidadtotalCiberAtaques(&primeroGrafo);
+    printf("La cantidad total de ciberataques enviados/recibidos es: %d \n", cantidadTotal);
+    printf("La cantidad de ataques efectuados por pais: \n");
+    cantidadEnviadosRecibidosXpais(&primeroGrafo);
+    printf("La cantidad de ataques efectuados por ciberataque: \n");
+    cantidadPorTipoCiberataque(&primeroGrafo);
+    printf("La cantidad total de ataques efectuados por ciberdelincuente corresponde a: \n");
+    cantidadPorCiberDelincuente(&primeroGrafo);
+    //top 3 ciberdelincuentes
+    //top 3 países más atacados
 
+}
 /*============================================================================================================================================*/
 int main() {
     insertarDatosManuales();
@@ -475,7 +489,7 @@ int main() {
                 //obtener rutas3
                 break;
             case 8:
-                //análisis de datos
+                analisisDeDatos();
                 break;
             case 9:
                 repite = 0;
