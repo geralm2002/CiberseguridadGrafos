@@ -175,7 +175,7 @@ Pais * buscarPorCodigo(Pais * raiz, int codigo){
             encontrado=1;
         }else if(codigo< raiz->codigo){
             raiz = raiz->izquierda;
-        }else if(codigo> raiz->derecha){
+        }else if(codigo > raiz->codigo){
             raiz = raiz->derecha;
         }
     }

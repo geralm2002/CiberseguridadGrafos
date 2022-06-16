@@ -373,7 +373,7 @@ void cantidadPorTipoCiberataque(NodoGrafo **pgrafo){
             unNodo = unNodo->enlace;
         }
         lista = lista->siguiente;
-        printf("La cantidad de ciberataques enviados/recibidos por el tipo de ciberataque %s  es: %d", lista->nombre, cantidad);
+        printf("\nLa cantidad de ciberataques enviados/recibidos por el tipo de ciberataque %s  es: %d", lista->nombre, cantidad);
     }
 
 }
@@ -394,7 +394,7 @@ void cantidadPorCiberDelincuente(NodoGrafo ** pGrafo){
             }
             unNodo = unNodo->enlace;
         }
-        printf("El ciberdelincuente %d ha hecho %d ataques\n" ,lista->id, cantidad);
+        printf("\nEl ciberdelincuente %d ha hecho %d ataques\n" ,lista->id, cantidad);
         lista = lista->siguiente;
     }
 }
@@ -466,6 +466,7 @@ void burbujaCiberdelincuentes(int arreglo[], int arrN[], int longitud) {
         }
     }
 }
+/*
 void topTresPaisesAtacados(NodoGrafo ** pgrafo){
     NodoGrafo * primero = *pgrafo;
     int lenGrafo = getLenGrafo(*pgrafo);
@@ -486,7 +487,8 @@ void topTresPaisesAtacados(NodoGrafo ** pgrafo){
     for (int j = 0 ; i < 3; i++){ //imprime del 1 al tres
         printf("%d . %s \n", i, topList[i]);
     }
-}
+}*/
+/*
 void topTresCiberDelincuentes(NodoGrafo ** pGrafo){
     NodoGrafo * primero = *pGrafo;
     Ciberdelincuente * ciberDlist = listaCD;
@@ -508,10 +510,9 @@ void topTresCiberDelincuentes(NodoGrafo ** pGrafo){
     for (int j = 0 ; i < 3; i++){ //imprime del 1 al tres
         printf("%d . ID: %d \n", i, listaid[i]);
     }
-
 }
 
-
+*/
 
 
 #endif //MPAULA_C_GRAFO_H

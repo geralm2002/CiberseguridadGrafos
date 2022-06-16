@@ -7,6 +7,7 @@
 # include "Pais.h"
 #include "MensajePila.h"
 #include <time.h>
+#include "dijsktra.h"
 /*============================================================================================================================================*/
 //Menus y recoleccion de datos
 NodoGrafo * primeroGrafo = NULL;
@@ -449,8 +450,8 @@ void analisisDeDatos(){
     cantidadPorTipoCiberataque(&primeroGrafo);
     printf("La cantidad total de ataques efectuados por ciberdelincuente corresponde a: \n");
     cantidadPorCiberDelincuente(&primeroGrafo);
-    topTresPaisesAtacados(&primeroGrafo);
-    topTresCiberDelincuentes(&primeroGrafo);
+    //topTresPaisesAtacados(&primeroGrafo);
+    //topTresCiberDelincuentes(&primeroGrafo);
 }
 /*============================================================================================================================================*/
 int main() {
