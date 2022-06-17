@@ -1325,12 +1325,13 @@ int datosTipoCiberataques() {
         case 1:
             modificarTipoDeCiberataque();
             break;
-        case 2:
+        case 2: /*
             int resp = eliminarTipoDeCiberAtaque();     //No debe tener un ataque asociado
             if(resp)
                 printf("Tipo de ciberataque eliminado exitosamente\n");
             else
                 printf("No se ha podido eliminar el tipo de ciberataque\n");
+                */
             break;
         case 3:
             mostrarTiposDeCiberataques();
