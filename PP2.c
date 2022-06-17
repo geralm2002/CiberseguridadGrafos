@@ -603,7 +603,7 @@ NodoGrafo* nuevoVertice(NodoGrafo** ngrafo,char *pais){
     return nuevo;
 }
 void insertarVertice(NodoGrafo** pGrafo, NodoGrafo* nuevo){
-    nuevo->enlace = *pGrafo;
+    nuevo->enlace = (*pGrafo);
     (*pGrafo) = nuevo;
 }
 NodoGrafo * obtenerVertice(NodoGrafo* primero, char * nombre){ //obtiene un nodo en el grafo
@@ -676,17 +676,17 @@ NodoGrafo * realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
     if(nodoProcedente ==NULL){ //en caso de que no exista deberá crear el vertice
         nodoProcedente = nuevoVertice(pGrafo, procedente->nombre); //lo crea
         insertarVertice(pGrafo,nodoProcedente); //inserta el nuevo en el grafo
-        printf("\nNuevo nodo insertado\n");
+        printf("%s   insertado\n", procedente->nombre);
     }else{
-        printf("\nEl nodo ya está en el grafo\n");
+        printf("%s ya esta en el grafo\n", procedente->nombre);
     }
     NodoGrafo * nodoDestino = obtenerVertice((*pGrafo), destino->nombre); //el ataque guarda el nombre del destino, no el nodo, aún así debemos verificar que esté en el grafo
     if(nodoDestino == NULL){
         nodoDestino = nuevoVertice(pGrafo, destino->nombre);
         insertarVertice(pGrafo,nodoDestino);
-        printf("\nNuevo nodo insertado\n");
+        printf("%s insertado\n", destino->nombre);
     }else{
-        printf("\nEl nodo ya esta en el grafo\n");
+        printf("%s ya esta en el grafo\n", destino->nombre);
     };
 
 
@@ -696,8 +696,8 @@ NodoGrafo * realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
         ataque = crearAtaque(destino->nombre, tipo, delincuente, tiempo, datos);
         agregarAtaque(nodoProcedente, ataque);
 
-        printf("\n¡Ataque registrado exitosamente!\n");
-        (*pGrafo) = nodoProcedente;
+        printf("\nAtaque registrado exitosamente!\n");
+        //(*pGrafo) = nodoProcedente;
         return nodoProcedente;
     }else{
         printf("\n->El ataque ya existe en el registro<-\n");
@@ -706,7 +706,7 @@ NodoGrafo * realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
         printf("\n== id tipo del ciberataque: %d", ataque->arista->idtipo);
         printf("\n== Cantidad de datos afectados: %d", ataque->arista->datosAfectados);
         printf("\n== Tiempo de duracion: %f", ataque->arista->tiempo);
-        printf("\n->Si desea modificarlo debera ingresar a la opcian de modificar ciberataques-\n");
+        printf("\n->Si desea modificarlo debera ingresar a la opcion de modificar ciberataques-\n");
         return NULL;
     }
 
@@ -874,7 +874,7 @@ void cantidadEnviadosRecibidosXpais(NodoGrafo ** pgrafo){
         }
         printf("-> %s envio un total de %d ciberataques. \n", unNodo->nombrePais, totalEnviados);
         printf("-> %s recibio un total de %d ciberataques.\n", unNodo->nombrePais, totalRecibidos );
-        printf("-------------------------------------------------------------");
+        printf("\n-------------------------------------------------------------\n");
         unNodo = unNodo->enlace;
     }
 }
@@ -885,6 +885,7 @@ void cantidadPorTipoCiberataque(NodoGrafo **pgrafo){
     int cantidad =0;
     while (lista !=NULL){
         cantidad = 0;
+        unNodo = *pgrafo;
         while (unNodo !=NULL){
             listaAtaques = unNodo->listaAtaques;
             while (listaAtaques!=NULL){
@@ -895,8 +896,8 @@ void cantidadPorTipoCiberataque(NodoGrafo **pgrafo){
             }
             unNodo = unNodo->enlace;
         }
-        lista = lista->siguiente;
         printf("\nLa cantidad de ciberataques enviados/recibidos por el tipo de ciberataque %s  es: %d", lista->nombre, cantidad);
+        lista = lista->siguiente;
     }
 
 }
@@ -907,17 +908,18 @@ void cantidadPorCiberDelincuente(NodoGrafo ** pGrafo){
     int cantidad = 0;
     while (lista !=NULL){
         cantidad = 0;
+        unNodo = *pGrafo;
         while(unNodo != NULL){
             listaAtaques = unNodo->listaAtaques;
             while (listaAtaques !=NULL){
                 if(listaAtaques->arista->idciberdelincuente == lista->id){
                     cantidad++;
                 }
-                listaAtaques = unNodo->listaAtaques;
+                listaAtaques = listaAtaques->siguiente;
             }
             unNodo = unNodo->enlace;
         }
-        printf("\nEl ciberdelincuente %d ha hecho %d ataques\n" ,lista->id, cantidad);
+        printf("\nEl ciberdelincuente %d del grupo %s ha hecho %d ataques" ,lista->id, lista->grupo,cantidad);
         lista = lista->siguiente;
     }
 }
@@ -1289,7 +1291,7 @@ void iniciarDijsktra(NodoGrafo ** pgrafo, char * vertice){
  *==================================================================================================================*/
 void titulo() {
     system("cls");
-    printf("\n     ------------------------------------------------------------------------------\n");
+    printf("\n\n     ------------------------------------------------------------------------------\n");
 	printf("\t\t\t\t CIBERSEGURIDAD \n");
 	printf("\t\t  Proyecto Programado II - Primer Semestre 2022\n");
 	printf("\t\t  Paula Catillo | Stephanny Salas | Hellen Peraza \n");
@@ -1675,6 +1677,12 @@ void insertarDatosManuales(){
     insertarPais(raiz, 54, "Argentina" , 4538000, "America");
     insertarPais(raiz, 61, "Australia" , 2569000, "Asia");
     insertarPais(raiz, 380, "Ucrania" , 4413000, "Europa");
+    insertarPais(raiz, 49, "Alemania" , 4300211, "Europa");
+    insertarPais(raiz, 32, "Belgica" , 9999954, "Europa");
+    insertarPais(raiz, 57, "Colombia" , 125800, "America del sur");
+    insertarPais(raiz, 34, "Espanna" , 1234566, "Europa");
+
+
 }
 int getAleatorio(int max){
     int a=(int) ((double)rand() /((double)RAND_MAX +1) * max);
@@ -1708,9 +1716,10 @@ void simularAtaques(){
         tiempo = getAleatorio(MAX_TIEMPO);
         NodoGrafo * respuesta = realizarAtaque(&grafo, origen, destino, tipo, delicuente, tiempo, datos);
         if(respuesta!=NULL){
-            primeroGrafo = grafo;
+            primeroGrafo = respuesta;
+            printf("\n\tATAQUE REALIZADO\n");
         }else{
-            cantidAtaques++;
+            i--;
         };
     }
     printf("Todos los ataques han sido registrados exitosamente");
@@ -1725,7 +1734,7 @@ void analisisDeDatos(){
     cantidadEnviadosRecibidosXpais(&primeroGrafo);
     printf("La cantidad de ataques efectuados por ciberataque: \n");
     cantidadPorTipoCiberataque(&primeroGrafo);
-    printf("La cantidad total de ataques efectuados por ciberdelincuente corresponde a: \n");
+    printf("\nLa cantidad total de ataques efectuados por ciberdelincuente corresponde a: \n");
     cantidadPorCiberDelincuente(&primeroGrafo);
     //topTresPaisesAtacados(&primeroGrafo);
     //topTresCiberDelincuentes(&primeroGrafo);
