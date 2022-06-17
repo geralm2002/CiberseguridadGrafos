@@ -86,6 +86,8 @@ typedef struct {
 } EstadoVertice;
 EstadoVertice D[T];
 
+// estructura del grafo
+
 typedef struct NodoGrafo{
     char nombrePais[25];
     struct Grafo *enlace;
@@ -114,8 +116,6 @@ typedef struct Mensaje{
 }Mensaje;
 
 NodoPila tope;
-
-
 
 NodoGrafo * primeroGrafo = NULL;
 NodoPila * pila ;
@@ -244,12 +244,15 @@ int eliminarTipoDeCiberAtaque(){
                 anterior->siguiente = lista->siguiente;
             }
             free(lista);
+            printf("Tipo de ciberataque eliminado exitosamente\n");
             return 1;
         }else{
             anterior = lista;
             lista = lista->siguiente;
         };
     }
+    printf("No se ha podido eliminar el tipo de ciberataque\n");
+
     return 0;
 }
 int tipoExiste(TipoDeCiberataque * lista,int tipo){
@@ -711,12 +714,12 @@ NodoGrafo * realizarAtaque(NodoGrafo** pGrafo,Pais* procedente, Pais * destino,
         return nodoProcedente;
     }else{
         printf("\n->El ataque ya existe en el registro<-\n");
-        printf("\n== Nombre del país atacado: %s", destino->nombre);
+        printf("\n== Nombre del pais atacado: %s", destino->nombre);
         printf("\n== id ciberlincuente: %d", ataque->arista->idciberdelincuente);
         printf("\n== id tipo del ciberataque: %d", ataque->arista->idtipo);
         printf("\n== Cantidad de datos afectados: %d", ataque->arista->datosAfectados);
-        printf("\n== Tiempo de duración: %f", ataque->arista->tiempo);
-        printf("\n->Si desea modificarlo deberá ingresar a la opción de modificar ciberataques-\n");
+        printf("\n== Tiempo de duracion: %f", ataque->arista->tiempo);
+        printf("\n->Si desea modificarlo debera ingresar a la opcian de modificar ciberataques-\n");
         return NULL;
     }
 
@@ -740,7 +743,7 @@ int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino) {
     if (vertice != NULL) {
         Ataques *ady = vertice->listaAtaques;
         Ataques *ant = NULL;
-        while (ady) {
+        while (ady !=NULL) {
             if (strcmp(ady->destino, destino) == 0) {
                 if (ant == NULL) { //anterior nulo
                     vertice->listaAtaques = ady->siguiente;
@@ -760,12 +763,6 @@ int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino) {
 
         return 0;
     }
-
-
-
-    //para saber si el ataque que deseamos eliminar existe
-
-
     return 0;
 }
 
@@ -1325,13 +1322,11 @@ int datosTipoCiberataques() {
         case 1:
             modificarTipoDeCiberataque();
             break;
-        case 2: /*
-            int resp = eliminarTipoDeCiberAtaque();     //No debe tener un ataque asociado
-            if(resp)
-                printf("Tipo de ciberataque eliminado exitosamente\n");
-            else
-                printf("No se ha podido eliminar el tipo de ciberataque\n");
-                */
+        case 2:
+            eliminarTipoDeCiberAtaque();     //No debe tener un ataque asociado
+
+
+
             break;
         case 3:
             mostrarTiposDeCiberataques();
@@ -1504,7 +1499,7 @@ void menuMensajeCifrado(){
  *
  *==================================================================================================================*/
 void opcionRegistraCiberAtaque(){
-    NodoGrafo * grafo = primeroGrafo;
+
     int codigoPaisProcedente,
     codigoPaisDestino,
     idTipoCiberataque,
@@ -1553,13 +1548,13 @@ void opcionRegistraCiberAtaque(){
     scanf("%d", &datosAfectados);
     printf("\nInserte el tiempo de duracion: ");
     scanf("%f", &tiempoDuracion);
-    NodoGrafo* respuesta = realizarAtaque(&grafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
+    NodoGrafo* respuesta = realizarAtaque(&primeroGrafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
     if(respuesta){
         printf( "Enviar notificacion a %s ",pDestino->nombre);
         fflush(stdin);
         Notificar(&pila, pDestino->nombre);
         fflush(stdin);
-        primeroGrafo = grafo;
+
     }
 }
 
@@ -1720,7 +1715,6 @@ void simularAtaques(){
             paisD = TERRITORIOS[getAleatorio(248)];
             destino = obtenerPais(raiz, paisD); //obtiene hasta que exista en el arbol
         }while(destino ==NULL);
-
         delicuente = getDelincuenteByIndex(getAleatorio(tamDelincuente));
         tipo = getTipoByIndex(getAleatorio(tamTipo-1));
         datos = getAleatorio(MAX_DATOSAFECTADOS);
@@ -1771,6 +1765,7 @@ int main() {
                 break;
             case 4:
                 menuGestionarCiberAtaques();
+                break;
             case 5:
                 menuMensajeCifrado();
                 break;
