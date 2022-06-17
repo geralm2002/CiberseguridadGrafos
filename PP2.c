@@ -512,13 +512,11 @@ Pais* eliminarPais(Pais* nodo, int codigo) {
         nodo->derecha = eliminarPais(nodo->derecha, codigo);        //Se busca la hoja con el codigo ingresado a la derecha
     else {
         if (nodo->izquierda == NULL) {
-            printf("Pais eliminado\n");
             Pais* temp = nodo->derecha;
             free(nodo);
             return temp;
         }
         else if (nodo->derecha == NULL) {
-            printf("Pais eliminado\n");
             Pais* temp = nodo->izquierda;
             free(nodo);
             return temp;
@@ -530,6 +528,7 @@ Pais* eliminarPais(Pais* nodo, int codigo) {
         nodo->derecha = eliminarPais(nodo->derecha, temp->codigo);
     }
 }
+
 
 void recorrerEnOrden(Pais* nodo) {
     if (nodo != NULL) {                                     //Se valida el no tener un registro
@@ -1399,6 +1398,7 @@ int datosPaises() {
             printf("Ingrese el continente: ");
             scanf("%s", continente);
             insertarPais(raiz, codigo, nombre, habitantes, continente);
+
             break;
         case 2:
             printf("Ingrese el codigo del pais: ");
@@ -1425,6 +1425,7 @@ int datosPaises() {
         default:
 			printf("Error: Favor ingresar uno de los numeros que se muestran en el menu!\n");
     };
+
     return 1;
 }
 
@@ -1438,6 +1439,10 @@ void menuPaises(int repite) {
         printf("\t\t[05]. Ver paises en jerarquia\n");
         printf("\t\t[06]. Salir\n");
         repite = datosPaises();
+        fflush(stdin);
+        fflush(stdout);
+        printf("\nPresione una tecla para continuar...");
+        system("pause>nul");
     } while(repite);
 }
 /*==================================================================================================================
