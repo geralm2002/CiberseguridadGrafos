@@ -638,7 +638,7 @@ Arista * buscarArista(NodoGrafo** paisGrafo,char * origen ,char * destino){ //ob
         while (ataque!=NULL){
             arista = ataque->arista;
             if(strcmp(ataque->destino, destino)==0){
-                return arista;
+                return arista; 
             }
             ataque = ataque->siguiente;
         }
