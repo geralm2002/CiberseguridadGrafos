@@ -937,7 +937,7 @@ void cantidadPorCiberDelincuente(NodoGrafo ** pGrafo){
             }
             unNodo = unNodo->enlace;
         }
-        printf("\nEl ciberdelincuente %d del grupo %s ha hecho %d ataques" ,lista->id, lista->grupo,cantidad);
+        printf("\nEl ciberdelincuente %d del grupo %s ha hecho %d ataques\n" ,lista->id, lista->grupo,cantidad);
         lista = lista->siguiente;
     }
 }
@@ -1255,8 +1255,8 @@ int llenarMatriz(float matPesos[][T], NodoGrafo ** pGrafo, int n){
         aux  = *pGrafo; //reinicio
         j= 0;
         while (aux !=NULL){
-            Arista * a = lista->arista;
             while(lista !=NULL){
+                Arista * a = lista->arista;
                 if(strcmp(aux->nombrePais, lista->destino)== 0){
                     matPesos[i][j]=a->tiempo;
                 }else{
@@ -1277,9 +1277,9 @@ int llenarMatriz(float matPesos[][T], NodoGrafo ** pGrafo, int n){
 
 
 
-void iniciarDijsktra(NodoGrafo ** pgrafo, char * vertice){
+void iniciarDijsktra(NodoGrafo ** pgrafo, NodoGrafo * vertice){
 
-    int n = getLenGrafo(*pgrafo);
+    int n = getLenGrafo((*pgrafo));
     llenarMatriz(matPesos, pgrafo, n);
     caminoMinimos(D, matPesos,  n);
     for(int i = 0; i<n; i ++){
@@ -1763,6 +1763,28 @@ void analisisDeDatos(){
     //topTresPaisesAtacados(&primeroGrafo);
     //topTresCiberDelincuentes(&primeroGrafo);
 }
+void datosDijkstra(){
+    int idprocedente;
+    Pais * paisProcedente;
+
+    do {
+        printf("->Ingrese el id del pais que realizo el ataque: ");
+        scanf("%d", &idprocedente);
+        fflush(stdin);
+        paisProcedente= obtenerPais(raiz,idprocedente);
+        if(paisProcedente==NULL){
+            printf("El país no existe registrado en el árbol\n intente de nuevo");
+        }
+    } while (paisProcedente== NULL);
+
+    NodoGrafo * nodoProcedente = obtenerVertice(primeroGrafo, paisProcedente->nombre);
+    if(nodoProcedente!=NULL){
+        iniciarDijsktra(&primeroGrafo, nodoProcedente);
+    }else{
+        printf("El nodo no se encuentra en el grafo");
+    }
+
+}
 /*============================================================================================================================================*/
 int main() {
     insertarDatosManuales();
@@ -1797,7 +1819,7 @@ int main() {
                 simularAtaques();
                 break;
             case 7:
-                //obtener rutas3
+                datosDijkstra();
                 break;
             case 8:
                 analisisDeDatos();
