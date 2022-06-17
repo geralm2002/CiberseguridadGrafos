@@ -638,7 +638,7 @@ Arista * buscarArista(NodoGrafo** paisGrafo,char * origen ,char * destino){ //ob
         while (ataque!=NULL){
             arista = ataque->arista;
             if(strcmp(ataque->destino, destino)==0){
-                return arista; 
+                return arista;
             }
             ataque = ataque->siguiente;
         }
@@ -776,7 +776,7 @@ void consultarGrafo(NodoGrafo * pNodoGrafo){
 }
 int modficarCiberAtaque(NodoGrafo ** primero){
     int idProcedente, idDestino;
-    NodoGrafo * paisProcedente, * paisDestino;
+    Pais * paisProcedente, * paisDestino;
     do {
         printf("\nIngrese el id pais que realizo el ciberAtaque: ");
         scanf("%d", &idProcedente);
@@ -795,13 +795,14 @@ int modficarCiberAtaque(NodoGrafo ** primero){
         }
     } while (paisDestino== NULL);
 
-    Arista * arista = buscarArista(primero, paisProcedente->nombrePais, paisDestino->nombrePais);
+    Arista * arista = buscarArista(primero, paisProcedente->nombre, paisDestino->nombre);
     TipoDeCiberataque * ciberataque;
     Ciberdelincuente *  ciberdelincuente;
     if(arista!=NULL){
         int idciberataque, idciberdelincuente, datosAfectados;
         float tiempo;
         do{
+            printf("\nAtaque encontrado listo para modificar! \n");
             printf("\n->Inserte el id del tipo de ciberataque: ");
             scanf("%d", &idciberataque);
             ciberataque = obtenerTipoCiberataque(idciberataque);
@@ -1062,14 +1063,14 @@ void pop(NodoPila** pila){
 void consultarTodaLaPila(NodoPila** pila){
     Mensaje * mensaje;
     char msmDescifrado[TAMMENSAJE];
-    while (!pilaVacia(*pila)){
-        mensaje = cima(*pila);
+    while (!(pilaVacia(*pila))){
+        mensaje = cima(pila);
         descifrar(msmDescifrado, mensaje->detalle);
         printf("->Pais receptor %s",mensaje->receptor);
         printf("->Detalle descifrado: \n %s", msmDescifrado);
         pop(pila);
     }
-    printf("SIN MÁS MENSAJES QUE MOSTRÁR");
+    printf("SIN MAS MENSAJES QUE MOSTRAR");
 }
 Mensaje* crearMensaje(char * pais, char m[TAMMENSAJE] ){
     Mensaje *nuevo;
@@ -1140,11 +1141,12 @@ void Notificar(NodoPila** pila ,char * paisdestino){
     char mensajeCifrado[TAMMENSAJE]="";
     printf("Escribe el mensaje a cifrar: \n");
     fflush(stdin);
-    fgets(mensaje, TAMMENSAJE, stdin);
-    mensaje[strcspn(mensaje, "\r\n")]=0; //quita saltos de linea
+    scanf("%s", mensaje);
+    //mensaje[strcspn(mensaje, "\r\n")]=0; //quita saltos de linea
+    fflush(stdin);
     cifrar(mensaje,mensajeCifrado);
     printf("El mensaje cifrado es: %s\n", mensajeCifrado);
-
+    fflush(stdout);
     Mensaje *notificacion = crearMensaje(paisdestino,mensajeCifrado);
     push(pila,notificacion);
 }
@@ -1168,11 +1170,11 @@ void consultarUltimoMensaje(NodoPila** pila){
     if(!pilaVacia(*pila)){
         Mensaje *msm = cima(pila);
         descifrar(msm->detalle,descifrado);
-        printf("País de destino: %s",msm->receptor);
+        printf("Pais de destino: %s",msm->receptor);
         printf("Mensaje: %s",descifrado);
         pop(pila);
     }else{
-        printf("Ya no hay más mensajes");
+        printf("Ya no hay mas mensajes");
     }
 }
 
@@ -1532,6 +1534,8 @@ void opcionRegistraCiberAtaque(){
     scanf("%f", &tiempoDuracion);
     NodoGrafo* respuesta = realizarAtaque(&primeroGrafo, pProcedente, pDestino, ciberataque, ciberdelincuente, tiempoDuracion, datosAfectados);
     if(respuesta){
+        printf("\nPresione una tecla para continuar...");
+        system("pause>nul");
         printf( "Enviar notificacion a %s ",pDestino->nombre);
         fflush(stdin);
         Notificar(&pila, pDestino->nombre);
@@ -1595,11 +1599,12 @@ int datosGestionarCiberAtaques(){
     fflush(stdin);
     printf("\n\t\tIngrese su opcion: [  ]\b\b\b");
     scanf("%d" , &opcion);
-
+    fflush(stdin);
 
     switch (opcion) {
         case 1:
             opcionRegistraCiberAtaque();
+
             break;
         case 2:
             modficarCiberAtaque(&primeroGrafo);
@@ -1701,8 +1706,12 @@ void simularAtaques(){
         tipo = getTipoByIndex(getAleatorio(tamTipo-1));
         datos = getAleatorio(MAX_DATOSAFECTADOS);
         tiempo = getAleatorio(MAX_TIEMPO);
-        realizarAtaque(&grafo, origen, destino, tipo, delicuente, tiempo, datos);
-        primeroGrafo = grafo;
+        NodoGrafo * respuesta = realizarAtaque(&grafo, origen, destino, tipo, delicuente, tiempo, datos);
+        if(respuesta!=NULL){
+            primeroGrafo = grafo;
+        }else{
+            cantidAtaques++;
+        };
     }
     printf("Todos los ataques han sido registrados exitosamente");
 
