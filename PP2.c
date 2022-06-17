@@ -415,9 +415,28 @@ Ciberdelincuente * getDelincuenteByIndex(int i){
     }
     return puntero;
 }
-/*===================*=======================*=======================*=======================*===========================
- *                                                  Pais
- **=======================*=======================*=======================*=======================*======================= */
+
+
+
+
+
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * /
+
+
+
 
 
 
@@ -438,23 +457,15 @@ Pais* nuevoPais(int codigo, char nombre[], int habitantes, char continente[]) {
     puntero->derecha = NULL;
     return puntero;
 }
-
-void insertarPais(Pais* nodo, int codigo, char nombre[], int habitantes, char continente[]) {
-    if(nodo == NULL){                                                               //Si la raiz esta vacia se asigna el nuevo pais en el mismo
-        raiz = nuevoPais(codigo, nombre, habitantes, continente);
+void insertarPais(Pais** raiz, int codigo, char nombre[], int habitantes, char continente[]) {
+    if(!(*raiz)){                                                               //Si la raiz esta vacia se asigna el nuevo pais en el mismo
+        *raiz = nuevoPais(codigo, nombre, habitantes, continente);
     }
-    else if (codigo > nodo->codigo) {              //Se identifica si el nodo debe ir a la derecha
-        if (nodo->derecha == NULL) {                                            //Se busca espacio en el nodo derecho
-            nodo->derecha = nuevoPais(codigo, nombre, habitantes, continente);
-        } else {                                                                //Si no hay se vuelve a buscar utilizando el nodo derecho como raiz
-            insertarPais(nodo->derecha, codigo, nombre, habitantes, continente);
-        }
+    else if (codigo < (*raiz)->codigo) {              //Se identifica si el nodo debe ir a la derecha
+        insertarPais(&((*raiz) ->izquierda), codigo,nombre,habitantes, continente);
     } else {                                       //Se asigna el nodo a la izquierda
-        if (nodo->izquierda == NULL) {                                           //Se busca espacio en el nodo derecho
-            nodo->izquierda = nuevoPais(codigo, nombre, habitantes, continente);
-        } else {                                                                 //Si no hay se vulve a buscar utilizando el nodo izquierdo como raiz
-            insertarPais(nodo->izquierda, codigo, nombre, habitantes, continente);
-        }
+        insertarPais(&((*raiz) ->derecha), codigo ,nombre,habitantes, continente);
+
     }
 }
 Pais * obtenerPais(Pais * nodo, int codigo){
@@ -500,33 +511,41 @@ Pais* hojaMenor(Pais* nodo) {
     }
     return actual;
 }
-
-Pais* eliminarPais(Pais* nodo, int codigo) {
-    if (nodo == NULL)                   //Se valida el no tener registro
-        return nodo;
-
-    if (codigo < nodo->codigo)
-        nodo->izquierda = eliminarPais(nodo->izquierda, codigo);    //Se busca la hoja con el codigo ingresado a la izquierda
-
-    else if (codigo > nodo->codigo)
-        nodo->derecha = eliminarPais(nodo->derecha, codigo);        //Se busca la hoja con el codigo ingresado a la derecha
-    else {
-        if (nodo->izquierda == NULL) {
-            Pais* temp = nodo->derecha;
-            free(nodo);
-            return temp;
-        }
-        else if (nodo->derecha == NULL) {
-            Pais* temp = nodo->izquierda;
-            free(nodo);
-            return temp;
-        }
-
-        Pais* temp = hojaMenor(nodo->derecha);
-
-        nodo->codigo = temp->codigo;
-        nodo->derecha = eliminarPais(nodo->derecha, temp->codigo);
+void reemplazar(Pais ** act){
+    Pais *a, *p;
+    p = *act;
+    a = (*act)->izquierda;
+    while (a->derecha){
+        p = a;
+        a = a->derecha;
     }
+    (*act) ->codigo = a ->codigo;
+    if(p == (*act))
+        p->izquierda = a ->izquierda;
+    else
+        p ->derecha = a->izquierda;
+    (*act) = a;
+}
+Pais* eliminarPais(Pais** praiz, int codigo) {
+   if(!(*praiz)){
+       printf("!Nodo no encontrado");
+   }else if(codigo < (*praiz)->codigo){
+       eliminarPais(&(*praiz)->izquierda, codigo);
+
+   }else if(codigo > (*praiz)->codigo){
+       eliminarPais(&(*praiz)->derecha, codigo);
+   }else{
+       Pais* q;
+       q = (*praiz);
+       if(q->izquierda == NULL){
+           (*praiz) = q->derecha;
+       }else if(q->derecha ==NULL){
+           (*praiz) = q->izquierda;
+       } else{
+           reemplazar(&q); // trata de equilibrar el arbol
+       }
+       free(q);
+   }
 }
 
 
@@ -1397,7 +1416,7 @@ int datosPaises() {
             scanf("%d", &habitantes);
             printf("Ingrese el continente: ");
             scanf("%s", continente);
-            insertarPais(raiz, codigo, nombre, habitantes, continente);
+            insertarPais(&raiz, codigo, nombre, habitantes, continente);
 
             break;
         case 2:
@@ -1408,7 +1427,7 @@ int datosPaises() {
         case 3:
             printf("Ingrese el codigo del pais: ");
             scanf("%d", &codigo);
-            eliminarPais(raiz, codigo);
+            eliminarPais(&raiz, codigo);
             break;
         case 4:
             recorrerEnOrden(raiz);
@@ -1676,16 +1695,16 @@ void insertarDatosManuales(){
     insertarCiberdelincuente(2, "Anonymous", "Alemania", ataques);
     insertarCiberdelincuente(3, "HackerSpace", "Inglaterra", ataques);
 
-    insertarPais(raiz, 506, "Costa Rica" , 200000, "America");
-    insertarPais(raiz, 47, "Noruega" , 537900, "Europa");
-    insertarPais(raiz, 81, "Japon" , 125800, "Asia");
-    insertarPais(raiz, 54, "Argentina" , 4538000, "America");
-    insertarPais(raiz, 61, "Australia" , 2569000, "Asia");
-    insertarPais(raiz, 380, "Ucrania" , 4413000, "Europa");
-    insertarPais(raiz, 49, "Alemania" , 4300211, "Europa");
-    insertarPais(raiz, 32, "Belgica" , 9999954, "Europa");
-    insertarPais(raiz, 57, "Colombia" , 125800, "America del sur");
-    insertarPais(raiz, 34, "Espanna" , 1234566, "Europa");
+    insertarPais(&raiz, 506, "Costa Rica" , 200000, "America");
+    insertarPais(&raiz, 47, "Noruega" , 537900, "Europa");
+    insertarPais(&raiz, 81, "Japon" , 125800, "Asia");
+    insertarPais(&raiz, 54, "Argentina" , 4538000, "America");
+    insertarPais(&raiz, 61, "Australia" , 2569000, "Asia");
+    insertarPais(&raiz, 380, "Ucrania" , 4413000, "Europa");
+    insertarPais(&raiz, 49, "Alemania" , 4300211, "Europa");
+    insertarPais(&raiz, 32, "Belgica" , 9999954, "Europa");
+    insertarPais(&raiz, 57, "Colombia" , 125800, "America del sur");
+    insertarPais(&raiz, 34, "Espanna" , 1234566, "Europa");
 
 
 }
