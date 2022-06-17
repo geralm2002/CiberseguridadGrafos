@@ -580,23 +580,9 @@ Pais * buscarPorCodigo(Pais * raiz, int codigo){
 }
 
 
-/*===================*=======================*=======================*=======================*===========================
- *                                                  grafos
- **=======================*=======================*=======================*=======================*======================= */
-
-
-
-
-
 
 /*=====================================================================================================================
- *                      Declaración de funciones
-=====================================================================================================================*/
-
-
-
-/*=====================================================================================================================
- *                          Funciones
+ *                          Funciones de análisis de datos
 =====================================================================================================================*/
 int getLenGrafo(NodoGrafo* ngrafo){
     NodoGrafo * primero = ngrafo;
@@ -645,11 +631,12 @@ Arista * crearArista(int tipoDeCiberataque, int ciberdelincuente, int datos, flo
 }
 Arista * buscarArista(NodoGrafo** paisGrafo,char * origen ,char * destino){ //obtiene la arista
     //El parámetro de los datos es necesario para especificar el ciber ataque a buscar
-    NodoGrafo * nodoGrafo = obtenerVertice(paisGrafo, origen);
+    NodoGrafo * nodoGrafo = obtenerVertice((*paisGrafo), origen);
     if(nodoGrafo!=NULL){
         Ataques * ataque = nodoGrafo->listaAtaques;
         Arista * arista;
         while (ataque!=NULL){
+            arista = ataque->arista;
             if(strcmp(ataque->destino, destino)==0){
                 return arista;
             }
@@ -739,7 +726,7 @@ int eliminarAtaquesPorPais(NodoGrafo* pais){
 int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino) {
     /*los datos afectados hacen más específica la búsqueda ya que un país podría tener varios ataques desde un mismo país
      * desde un mismo ciberdelincuente, del mismo tipo de ciber ataque también*/
-    NodoGrafo *vertice = obtenerVertice(grafo, origen);
+    NodoGrafo *vertice = obtenerVertice((*grafo), origen);
     if (vertice != NULL) {
         Ataques *ady = vertice->listaAtaques;
         Ataques *ant = NULL;
@@ -759,9 +746,6 @@ int eliminarUnCiberAtaque(NodoGrafo ** grafo, char * origen ,char * destino) {
             }
 
         }
-    }else{
-
-        return 0;
     }
     return 0;
 }
@@ -1324,8 +1308,6 @@ int datosTipoCiberataques() {
             break;
         case 2:
             eliminarTipoDeCiberAtaque();     //No debe tener un ataque asociado
-
-
 
             break;
         case 3:
